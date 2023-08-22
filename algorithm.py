@@ -1,32 +1,31 @@
 import sys
-from collections import deque
+import heapq
 input = sys.stdin.readline
-n = int(input().strip())
-
-costs = [0] * n
-inDegree = [0] * n
-res = [0] * n
-q = deque()
+n,m = map(int,input().split())
+start = int(input().strip())
 adj = [[] for _ in range(n)]
-for i in range(n):
-    data = list(map(int, input().strip().split()))
-    costs[i] = data[0]
-    for j in data[1:]:
-        if j == -1:
-            break
-        adj[j - 1].append(i)
-        inDegree[i] += 1
-    if 0 == inDegree[i]:
-        q.append(i)
+bestDist = [float("inf")] * n
+q = []
+for _ in range(m):
+    a,b,c = map(int,input().split())
+    adj[a-1].append((c,b-1))
+bestDist[start - 1] = 0
+heapq.heappush(q,(0,start - 1))
 while q:
-    node = q.popleft()
+    cost,node = heapq.heappop(q)
+    if bestDist[node] < cost:
+        continue
     for next in adj[node]:
-        inDegree[next] -= 1
-        if 0 == inDegree[next]:
-            q.append(next)
-        res[next] = max(res[next] , res[node] + costs[node])
-for i in range(n):
-    print(res[i] + costs[i])
+        nextCost = next[0] + cost
+        if(bestDist[next[1]] > nextCost):
+            bestDist[next[1]] = nextCost
+            heapq.heappush(q,(nextCost,next[1]))
+for i in bestDist:
+    if float("inf") == i:
+        print("INF")
+    else:
+        print(i)
+
 
 
 

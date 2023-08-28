@@ -1,33 +1,29 @@
 import sys
-import heapq
 input = sys.stdin.readline
+
 n,m = map(int,input().split())
-start = int(input().strip())
-adj = [[] for _ in range(n)]
-bestDist = [float("inf")] * n
-q = []
+dists = [float("INF")] * n
+adj=[]
 for _ in range(m):
-    a,b,c = map(int,input().split())
-    adj[a-1].append((c,b-1))
-bestDist[start - 1] = 0
-heapq.heappush(q,(0,start - 1))
-while q:
-    cost,node = heapq.heappop(q)
-    if bestDist[node] < cost:
-        continue
-    for next in adj[node]:
-        nextCost = next[0] + cost
-        if(bestDist[next[1]] > nextCost):
-            bestDist[next[1]] = nextCost
-            heapq.heappush(q,(nextCost,next[1]))
-for i in bestDist:
-    if float("inf") == i:
-        print("INF")
-    else:
-        print(i)
-
-
-
+    u, v, w = map(int,input().split())
+    adj.append((u - 1,v - 1,w))
+dists[0] = 0
+ok=True
+for _ in range(n-1):
+    for u,v,w in adj:
+        if float("INF") == dists[u]:continue
+        if(dists[v] > dists[u] + w):
+            dists[v] = dists[u] + w
+for u,v,w in adj:
+    if float("INF") == dists[u]: continue
+    if (dists[v] > dists[u] + w):
+        ok = False
+if ok:
+    for i in dists[1:]:
+        if float("INF") == i : print(-1)
+        else: print(i)
+else:
+    print(-1)
 
 
 

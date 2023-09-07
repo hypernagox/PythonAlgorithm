@@ -1,34 +1,32 @@
 import sys
 input = sys.stdin.readline
-import heapq
+sys.setrecursionlimit(100000)
 a,b = map(int,input().split())
-graph = [ [] for _ in range(a)]
+adj = [[] for _ in range(a)]
 visited = [False] * a
-bestDist = [float("INF")] * a
 for _ in range(b):
-    u,v,w = map(int,input().split())
-    graph[u-1].append((w,v-1))
-    graph[v-1].append((w,u-1))
-res = 0
-pq = []
-bestDist[0] = 0
-heapq.heappush(pq,(0,0))
-while pq:
-    dist,cur = heapq.heappop(pq)
-    if visited[cur]:
-        continue
-    visited[cur] = True
-    res += dist
-    for cost,node in graph[cur]:
-        if not visited[node] and bestDist[node] > cost:
-            bestDist[node] = cost
-            heapq.heappush(pq,(cost,node))
-print(res)
-
-
-
-
-
-
-
-
+    u,v = map(int,input().split())
+    adj[v-1].append(u-1)
+    adj[u-1].append(v-1)
+def is_eulerian():
+    odd_count = sum(1 for node in adj if len(node) % 2 == 1)
+    if odd_count == 0 or odd_count == 2:
+        return True
+    return False
+def dfs(node):
+    visited[node] = True
+    for next in adj[node]:
+        if not visited[next]:
+            dfs(next)
+def can_visit():
+    global visited
+    for i in range(a):
+        dfs(i)
+        if all(visited):
+            return True
+        visited = [False] * a
+    return False
+if is_eulerian() and can_visit():
+    print("YES")
+else:
+    print("NO")

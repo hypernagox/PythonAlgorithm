@@ -1,38 +1,28 @@
 import sys
 input = sys.stdin.readline
-n,m = map(int,input().split())
-class DisjointSet:
-    def __init__(self,n):
-        self.parent=[i for i in range(n)]
-        self.rank = [0 for _ in range(n)]
-    def Find(self,n):
-        if self.parent[n] == n:
-            return n
-        self.parent[n] = self.Find(self.parent[n])
-        return self.parent[n]
-    def Union(self,u,v):
-        if u == v:
-            return False
-        u = self.Find(u)
-        v = self.Find(v)
-        if u == v :
-            return False
-        if(self.rank[u] > self.rank[v]):
-            u,v = v,u
-        self.parent[u] = v
-        if(self.rank[u] == self.rank[v]):
-            self.rank[v] +=1
-        return True
-adj = []
-for _ in range(m):
+import heapq
+a,b = map(int,input().split())
+graph = [ [] for _ in range(a)]
+visited = [False] * a
+bestDist = [float("INF")] * a
+for _ in range(b):
     u,v,w = map(int,input().split())
-    adj.append((u - 1,v - 1,w))
-adj.sort(key = lambda x:x[2])
-uf = DisjointSet(n)
+    graph[u-1].append((w,v-1))
+    graph[v-1].append((w,u-1))
 res = 0
-for u,v,w in adj:
-    if uf.Union(u,v):
-        res +=w
+pq = []
+bestDist[0] = 0
+heapq.heappush(pq,(0,0))
+while pq:
+    dist,cur = heapq.heappop(pq)
+    if visited[cur]:
+        continue
+    visited[cur] = True
+    res += dist
+    for cost,node in graph[cur]:
+        if not visited[node] and bestDist[node] > cost:
+            bestDist[node] = cost
+            heapq.heappush(pq,(cost,node))
 print(res)
 
 

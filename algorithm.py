@@ -1,26 +1,42 @@
 import sys
 input = sys.stdin.readline
-import heapq
-a = int(input())
-b = int(input())
+a,b,c,d = map(int,input().split())
+edges = [0] * d
+bestDists = [-float("INF")] * a
+visited = [False] * a
 adj = [[] for _ in range(a)]
-bestDist = [float("INF")] * a
-for _ in range(b):
+for i in range(d):
     u,v,w = map(int,input().split())
-    adj[u-1].append((w,v-1))
-start,end = map(int,input().split())
-pq = []
-bestDist[start-1]=0
-heapq.heappush(pq,(0,start-1))
-while pq:
-    cost,cur = heapq.heappop(pq)
-    if bestDist[cur] < cost:
+    edges[i] = (u,v,w)
+    adj[u].append(v)
+benefits = [int(x) for x in input().split()]
+bestDists[b] = benefits[b]
+res = benefits[b]
+def dfs(cur):
+    if cur == c :
+        return True
+    visited[cur] = True
+    can_visit = False
+    for next in adj[cur]:
+        if not visited[next]:
+            can_visit |= dfs(next)
+    return can_visit
+for _ in range(a-1):
+    for u,v,w in edges:
+        if -float("INF") == bestDists[u]:
+            continue
+        if bestDists[v] < bestDists[u] - w + benefits[v]:
+            bestDists[v] = bestDists[u] - w + benefits[v]
+if -float("INF") == bestDists[c]:
+    print("gg")
+    sys.exit()
+for u, v, w in edges:
+    if -float("INF") == bestDists[u]:
         continue
-    for nextCost,node in adj[cur]:
-        if bestDist[node] > cost + nextCost:
-            bestDist[node] = cost + nextCost
-            heapq.heappush(pq,(bestDist[node],node))
-print(bestDist[end-1])
-
-
-
+    if bestDists[v] < bestDists[u] - w + benefits[v]:
+        if dfs(v):
+            print("Gee")
+            sys.exit()
+        else:
+            visited = [False] * a
+print(bestDists[c])

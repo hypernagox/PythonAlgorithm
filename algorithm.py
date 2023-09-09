@@ -1,32 +1,42 @@
 import sys
+from collections import deque
+sys.setrecursionlimit(1000000)
 input = sys.stdin.readline
-sys.setrecursionlimit(100000)
-a,b = map(int,input().split())
+a = int(input())
+b = int(input())
 adj = [[] for _ in range(a)]
+adj_rev = [[] for _ in range(a)]
+inDeg = [0] * a
+dists = [-1] * a
 visited = [False] * a
 for _ in range(b):
-    u,v = map(int,input().split())
-    adj[v-1].append(u-1)
-    adj[u-1].append(v-1)
-def is_eulerian():
-    odd_count = sum(1 for node in adj if len(node) % 2 == 1)
-    if odd_count == 0 or odd_count == 2:
-        return True
-    return False
-def dfs(node):
-    visited[node] = True
-    for next in adj[node]:
-        if not visited[next]:
-            dfs(next)
-def can_visit():
-    global visited
-    for i in range(a):
-        dfs(i)
-        if all(visited):
-            return True
-        visited = [False] * a
-    return False
-if is_eulerian() and can_visit():
-    print("YES")
-else:
-    print("NO")
+    u,v,w = map(int,input().split())
+    adj[u-1].append((v-1,w))
+    adj_rev[v-1].append((u-1,w))
+    inDeg[v-1] += 1
+start,end = map(int,input().split())
+q = deque()
+q.append((start-1,0))
+dists[start-1] = 0
+while q:
+    node,cost = q.popleft()
+    for n,d in adj[node]:
+        inDeg[n]-=1
+        dists[n] = max(dists[n], d + cost)
+        if 0 == inDeg[n] :
+            q.append((n,dists[n]))
+print(dists[end-1])
+res = 0
+def dfs(cur):
+    global res
+    visited[cur] = True
+    for next,cost in adj_rev[cur]:
+        if dists[next] == dists[cur] - cost:
+            res += 1
+            if not visited[next]:
+                dfs(next)
+dfs(end-1)
+print(res)
+
+
+

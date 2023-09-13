@@ -1,32 +1,13 @@
 import sys
 sys.setrecursionlimit(1000000)
 input = sys.stdin.readline
+import heapq
 dy = [-1,0,1,0]
 dx = [0,1,0,-1]
 N,M = map(int,input().split())
 adj = [list(map(int,input().split())) for _ in range(N)]
 island_num = 1
 visited = [[False] * M for _ in range(N)]
-class DisjointSet:
-    def __init__(self,n):
-        self.parent = [ i for i in range(n)]
-        self.rank = [0] * n
-    def Find(self,u):
-        if self.parent[u] == u:
-            return u
-        self.parent[u] = self.Find(self.parent[u])
-        return self.parent[u]
-    def Union(self,u,v):
-        u = self.Find(u)
-        v = self.Find(v)
-        if u == v:
-            return False
-        if self.rank[u] > self.rank[v]:
-            u,v = v,u
-        self.parent[u] = v
-        if self.rank[u] == self.rank[v]:
-            self.rank[v] += 1
-        return True
 def numbering(y,x):
     visited[y][x]=True
     adj[y][x] = island_num
@@ -61,7 +42,7 @@ def makeDari(y,x,start,target,cnt,dir):
         return sys.maxsize
     return makeDari(ny,nx,start,target,cnt+1,dir)
 
-adj_graph = []
+adj_graph = [[] for _ in range(island_num - 1)]
 for i in range(island_num - 1):
     for j in range(i+1,island_num - 1):
         minval = sys.maxsize
@@ -77,19 +58,23 @@ for i in range(island_num - 1):
                         continue
                     minval = min(minval,temp)
         if minval != sys.maxsize and minval != 1:
-            adj_graph.append((minval,i,j))
-cnt = 0
-sum = 0
-adj_graph.sort()
-uf = DisjointSet(island_num - 1)
-for _ in range(island_num - 2):
-    for w,u,v in adj_graph:
-        if uf.Union(u,v):
-            sum += w
-            cnt += 1
-
-if cnt == island_num -2:
-    print(sum)
+            adj_graph[i].append((minval,j))
+            adj_graph[j].append((minval,i))
+visited2 = [False] * (island_num - 1)
+pq = [(0,0)]
+bestDist = [sys.maxsize] * (island_num - 1)
+bestDist[0] = 0
+while pq:
+    cost,cur = heapq.heappop(pq)
+    if visited2[cur]:
+        continue
+    visited2[cur] = True
+    for w,u in adj_graph[cur]:
+        if not visited2[u] and bestDist[u] > w :
+            bestDist[u] = w
+            heapq.heappush(pq,(w,u))
+if all(visited2):
+    print(sum(bestDist))
 else:
     print(-1)
 

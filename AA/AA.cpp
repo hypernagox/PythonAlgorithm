@@ -25,7 +25,6 @@ public:
 	int Find(int u){
 		return parents[u] = parents[u] == u ? u : Find(parents[u]);
 	}
-	bool IsUnion(int u, int v){ return Find(u) == Find(v); }
 };
 int main()
 {
@@ -34,12 +33,13 @@ int main()
 	int n, m, k;
 	cin >> n >> m >> k;
 	vector<int> party[50];
-	vector<int> tp;
+	unordered_set<int> tp;
 	tp.reserve(50);
 	UnionFind uf{ n };
 	while (k--) {
 		int x; cin >> x;
-		tp.emplace_back(x - 1);
+		tp.emplace(x - 1);
+		uf.rank[x - 1] = -50;
 	}
 	for (int i = 0; i < m; ++i) {
 		int x; cin >> x;
@@ -56,8 +56,7 @@ int main()
 	for (int i = 0; i < m; ++i) {
 		bool flag = true;
 		for (const auto p : party[i]) {
-			for(const auto t:tp)
-			if (uf.IsUnion(p-1,t)) {
+			if (tp.contains(uf.Find(p - 1))) {
 				flag = false;
 				break;
 			}

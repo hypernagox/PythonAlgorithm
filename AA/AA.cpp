@@ -3,19 +3,20 @@
 using namespace std;
 int main()
 {
-	int dp[100001]{};
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL); cout.tie(NULL);
+	int dp[501];
+	int arr[13];
 	int n, m;
-	int res = 0;
-	cin >> n >> m;
-	for (int i = 0; i < n; ++i) {
-		int w, v;
-		cin >> w >> v;
-		for (int j = m; j >= w; --j) {
-			dp[j] = max(dp[j], dp[j - w] + v);
-			res = max(dp[j], res);
+	cin >> n;
+	for (int i = 1; i <= n; ++i)cin >> arr[i];
+	cin >> m;
+	for (auto& i : dp)i = 54321;
+	dp[0] = 0;
+	for (int i = 1; i <= n; ++i) {
+		for (int j = arr[i]; j <= m; ++j) {
+			dp[j] = min(dp[j], dp[j - arr[i]] + 1);
 		}
 	}
-	cout << res;
+	cout << dp[m];
 }

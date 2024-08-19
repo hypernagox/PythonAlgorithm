@@ -4,34 +4,32 @@
 #include <vector>
 using namespace std;
 
+int dp[20][20];
+int arr[20][20];
+
+int go(int i,int j)
+{
+	if (0 > i || 0 > j)return 0;
+	if (dp[i][j])return dp[i][j];
+	return dp[i][j] = min(go(i - 1, j), go(i, j - 1)) + arr[i][j];
+}
+
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL); cout.tie(NULL);
 	int n;
-	pair<int, int> dp[1000];
 	cin >> n;
-	for (int i = 0; i < n; ++i)cin >> dp[i].first;
-	dp[0].second = 1;
-	int res = 1;
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < n; ++j) {
+			cin >> arr[i][j];
+		}
+	}
+	dp[0][0] = arr[0][0];
 	for (int i = 1; i < n; ++i) {
-		int max_v = 1;
-		for (int j = i - 1; j >= 0; --j) {
-			if (dp[j].first < dp[i].first && dp[j].second + 1 > max_v) {
-				max_v = dp[j].second + 1;
-			}
-		}
-		dp[i].second = max_v;
-		res = max(res, max_v);
+		dp[0][i] = dp[0][i - 1] + arr[0][i];
+		dp[i][0] = dp[i - 1][0] + arr[i][0];
 	}
-	cout << res << '\n';
-	vector<int> v;
-	for (int i = n - 1; i >= 0; --i) {
-		if (dp[i].second == res) {
-			v.emplace_back(dp[i].first);
-			--res;
-		}
-	}
-	ranges::sort(v);
-	for (auto i : v)cout << i << ' ';
+	go(n - 1, n - 1);
+	cout << dp[n - 1][n - 1];
 }

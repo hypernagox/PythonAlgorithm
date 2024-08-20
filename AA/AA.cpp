@@ -2,31 +2,39 @@
 #include <algorithm>
 #include <vector>
 #include <queue>
-#include <ranges>
 using namespace std;
-vector<int> v[32001];
-bool visited[32001];
-vector<int> res;
-void dfs(int n)
-{
-	if (visited[n])return;
-	visited[n] = true;
-	for (auto i : v[n]) {
-		if (!visited[i])dfs(i);
-	}
-	res.emplace_back(n);
-}
+vector<int> build[501];
+int cost[501];
+int res[501];
+int inDegree[501];
+queue<int> q;
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL); cout.tie(NULL);
-	int n, m;
-	cin >> n >> m;
-	res.reserve(n);
-	while (m--) {
-		int x, y; cin >> x >> y;
-		v[x].emplace_back(y);
+	int n; cin >> n;
+	
+	for (int i = 1; i <= n; ++i) {
+		cin >> cost[i];
+		res[i] = cost[i];
+		for (;;) {
+			int x; cin >> x;
+			if (-1 == x)break;
+			build[x].emplace_back(i);
+			++inDegree[i];
+		}
 	}
-	for (int i = 1; i <= n; ++i)dfs(i);
-	for (auto i : res | views::reverse)cout << i << ' ';
+	for (int i = 1; i <= n; ++i) {
+		if (0 == inDegree[i])q.emplace(i);
+	}
+	while (!q.empty()) {
+		const int n = q.front(); q.pop();
+		for (auto i : build[n]) {
+			res[i] = max(res[i], res[n] + cost[i]);
+			if (0 == --inDegree[i]) {
+				q.emplace(i);
+			}
+		}
+	}
+	for (int i = 1; i <= n; ++i)cout <<  res[i] << '\n';
 }

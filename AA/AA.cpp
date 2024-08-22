@@ -9,7 +9,7 @@ constexpr int dx[4]{ 0,1,0,-1 };
 int n, m;
 vector<pair<int, int>> c;
 vector<pair<int, int>> h;
-vector<int> cost[50];
+vector<int> cost[100];
 vector<std::vector<int>> result; 
 void combinationUtil(int m, int start, std::vector<int>& current) {
 	

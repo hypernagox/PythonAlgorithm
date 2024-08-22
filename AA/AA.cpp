@@ -1,30 +1,66 @@
 #include <iostream>
 #include <algorithm>
 #include <ranges>
+#include <vector>
+#include <numeric>
 using namespace std;
-int arr[2][100002];
-int dp[2][100002];
+constexpr int dy[4]{ -1,0,1,0 };
+constexpr int dx[4]{ 0,1,0,-1 };
+int n, m;
+vector<pair<int, int>> c;
+vector<pair<int, int>> h;
+vector<int> cost[50];
+vector<std::vector<int>> result; 
+void combinationUtil(int m, int start, std::vector<int>& current) {
+	
+	if (current.size() == m) {
+		result.push_back(current);
+		return;
+	}
+	for (int i = start; i < c.size(); ++i) {
+		current.push_back(i);
+		combinationUtil(m, i + 1, current);
+		current.pop_back(); 
+	}
+}
 
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL); cout.tie(NULL);
-	int t, n;
-	cin >> t;
-	while (t--) {
-		cin >> n;
-		for (int i = 0; i < 2; ++i) {
-			int m = n;
-			while (m--) {
-				cin >> arr[i][n - m];
+	cin >> n >> m;
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < n; ++j) {
+			int x; cin >> x;
+			if (2 == x) {
+				c.emplace_back(i, j);
+			}
+			else if (1 == x) {
+				h.emplace_back(i, j);
 			}
 		}
-		dp[0][1] = arr[0][1];
-		dp[1][1] = arr[1][1];
-		for (int i = 2; i <= n; ++i) {
-			dp[0][i] = max(dp[1][i - 1], dp[1][i - 2]) + arr[0][i];
-			dp[1][i] = max(dp[0][i - 1], dp[0][i - 2]) + arr[1][i];
-		}
-		cout << max(dp[0][n], dp[1][n]) << '\n';
 	}
+	for (int cnt = 0; auto h_:h) {
+		for (auto c_ : c) {
+			cost[cnt].emplace_back(abs(h_.first - c_.first) + abs(h_.second - c_.second));
+		}
+		++cnt;
+	}
+	vector<int> current;
+	for (int i = 1; i <= m; ++i) {
+		combinationUtil(i, 0, current);
+	}
+	int sum = 987654321;
+	for (int i = 0; i < result.size(); ++i) {
+		int res = 0;
+		for (int j = 0; j < h.size(); ++j) {
+			int minval = 987654321;
+			for (auto k : result[i]) {
+				minval = min(minval, cost[j][k]);
+			}
+			res += minval;
+		}
+		sum = min(sum, res);
+	}
+	cout << sum;
 }

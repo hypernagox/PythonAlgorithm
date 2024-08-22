@@ -1,24 +1,31 @@
 #include <iostream>
 #include <algorithm>
 #include <ranges>
-#include <vector>
-#include <map>
 using namespace std;
-int dp[101][1001];
-pair<int, int> p[101];
+int arr[2][100002];
+int dp[2][100002];
+
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL); cout.tie(NULL);
-	int n, m; cin >> n >> m;
-	for (int i = 1; i <= n; ++i)cin >> p[i].first >> p[i].second;
-	for (int i = 1; i <= n; ++i) {
-		for (int j = 1; j <= m; ++j) {
-			if (p[i].second <= j)
-				dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - p[i].second] + p[i].first);
-			else
-				dp[i][j] = dp[i - 1][j];
+	int t, n;
+	cin >> t;
+	while (t--) {
+		cin >> n;
+		for (int i = 0; i < 2; ++i) {
+			int m = n;
+			while (m--) {
+				cin >> arr[i][n - m];
+			}
 		}
+		dp[0][1] = arr[0][1];
+		dp[1][1] = arr[1][1];
+		
+		for (int i = 2; i <= n; ++i) {
+			dp[0][i] = max(dp[1][i - 1] + arr[0][i], max(dp[1][i - 2], dp[0][i - 2]) + arr[0][i]);
+			dp[1][i] = max(dp[0][i - 1] + arr[1][i], max(dp[0][i - 2], dp[1][i - 2]) + arr[1][i]);
+		}
+		cout << max(dp[0][n], dp[1][n]) << '\n';
 	}
-	cout << dp[n][m];
 }

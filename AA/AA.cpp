@@ -1,35 +1,39 @@
 #include <iostream>
 #include <algorithm>
-#include <numeric>
 #include <vector>
+#include <ranges>
 using namespace std;
+int arr[1000001];
+int dp[1000001];
+int idx[1000001];
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL); cout.tie(NULL);
 	int n; cin >> n;
-	vector<int> v;
-	v.reserve(n);
-	int res = 0;
-	for (int i = 0; i < n; ++i) {
-		int x; cin >> x;
-		if (x >= n) {
-			res += (x / n);
-			v.emplace_back(x % n);
+	for (int i = 1; i <= n; ++i) { cin >> arr[i]; }
+	int len = 0;
+	dp[len] = -(1 << 30);
+	for (int i = 1; i <= n; ++i) {
+		if (dp[len] < arr[i]) {
+			++len;
+			dp[len] = arr[i];
+			idx[i] = len;
 		}
 		else {
-			v.emplace_back(x);
+			const auto iter = ranges::lower_bound(dp, dp + len, arr[i]);
+			*iter = arr[i];
+			idx[i] = distance(dp, iter);
+		}	
+	}
+	cout << len << '\n';
+	vector<int> v;
+	v.reserve(len);
+	for (int i = n; i >= 1; --i) {
+		if (idx[i] == len) {
+			v.emplace_back(arr[i]);
+			--len;
 		}
 	}
-	int remains = (int)v.size();
-	int mn = 1 << 30;
-	const auto sentinel = ranges::sort(v);
-	for (auto iter = v.begin(); remains && iter != sentinel;) {
-		const auto val = *iter;
-		const auto up = ranges::upper_bound(iter, sentinel, val);
-		remains -= up - iter;
-		mn = min(mn, val + remains);
-		iter = up;
-	}
-	cout << res + mn;
+	for (const auto i : v | views::reverse)cout << i << ' ';
 }

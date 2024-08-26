@@ -1,39 +1,35 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
-#include <ranges>
 using namespace std;
-int arr[1000001];
-int dp[1000001];
-int idx[1000001];
+vector<int> tree[100001];
+bool visited[100001];
+int num[100001];
+int a, b, c;
+void go(int curNode)
+{
+	visited[curNode] = 1;
+	num[curNode] = 1;
+	for (const auto i : tree[curNode]) {
+		if (visited[i])continue;
+		go(i);
+		num[curNode] += num[i];
+	}
+}
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL); cout.tie(NULL);
-	int n; cin >> n;
-	for (int i = 1; i <= n; ++i) { cin >> arr[i]; }
-	int len = 0;
-	dp[len] = -(1 << 30);
-	for (int i = 1; i <= n; ++i) {
-		if (dp[len] < arr[i]) {
-			++len;
-			dp[len] = arr[i];
-			idx[i] = len;
-		}
-		else {
-			const auto iter = ranges::lower_bound(dp, dp + len, arr[i]);
-			*iter = arr[i];
-			idx[i] = distance(dp, iter);
-		}	
+	cin >> a >> b >> c;
+	a--;
+	while (a--) {
+		int x, y; cin >> x >> y;
+		tree[x].emplace_back(y);
+		tree[y].emplace_back(x);
 	}
-	cout << len << '\n';
-	vector<int> v;
-	v.reserve(len);
-	for (int i = n; i >= 1; --i) {
-		if (idx[i] == len) {
-			v.emplace_back(arr[i]);
-			--len;
-		}
+	go(b);
+	while (c--) {
+		int x; cin >> x;
+		cout << num[x] << '\n';
 	}
-	for (const auto i : v | views::reverse)cout << i << ' ';
 }

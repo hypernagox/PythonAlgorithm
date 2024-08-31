@@ -2,28 +2,37 @@
 #include <algorithm>
 #include <ranges>
 #include <vector>
+#include <queue>
 using namespace std;
-int dp[10001];
+vector<int> adj[1001];
+int costs[1001];
+int inDegree[1001];
+int res[1001];
 int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL); cout.tie(NULL);
-    int n, m; cin >> n >> m;
-    vector<pair<int, int>> items;
-    for (int i = 0; i < n; ++i) {
-        int v, c, k; cin >> v >> c >> k;
-        for (int j = k; k >= 1; k = k >> 1) {
-            j = k - (k >> 1);
-            items.emplace_back(v * j, c * j);
+    int t, n, k; cin >> t;
+    while (t--) {
+        cin >> n >> k;
+        for (int i = 1; i <= n; ++i) { cin >> costs[i]; inDegree[i] = 0; res[i] = costs[i]; adj[i].clear(); }
+        while (k--) {
+            int a, b; cin >> a >> b;
+            adj[a].emplace_back(b);
+            ++inDegree[b];
         }
-    }
-    const int num = (int)items.size();
-    int res = -1;
-    for (int i = 0; i < num; ++i) {
-        for (int j = m; j >= items[i].first; --j) {
-            dp[j] = max(dp[j], dp[j - items[i].first] + items[i].second);
-            res = max(res, dp[j]);
+        queue<int> q;
+        for (int i = 1; i <= n; ++i) {
+            if (!inDegree[i])q.emplace(i);
         }
+        int dest; cin >> dest;
+        while (!q.empty()) {
+            const auto node = q.front(); q.pop();
+            for (const auto i : adj[node]) {
+                if (0 == --inDegree[i])q.emplace(i);
+                res[i] = max(res[i], res[node] + costs[i]);
+            }
+        }
+        cout << res[dest] << '\n';
     }
-    cout << res;
 }

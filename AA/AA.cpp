@@ -1,37 +1,42 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
-#include <functional>
+#include <ranges>
 using namespace std;
 struct B {
-    int score = 0;
+    int score;
     bool flag = false;
+    B()noexcept = default;
+    B(const B& a)noexcept :score{ a.score }, flag{ false } {}
+    auto operator<=>(const B& a)const noexcept { return score <=> a.score; }
 };
+
 int n;
-vector<vector<B>> b;
 int res;
-void init(vector<vector<B>>& board)
+vector<vector<B>> board;
+bool c;
+bool IsSame(const vector<vector<B>>& a, const vector<vector<B>>& b)
 {
-    for (auto& row : board) {
-        for (auto& cell : row) {
-            cell.flag = false;
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j)
+        {
+            if (a[i][j].score != b[i][j].score)return false;
         }
     }
-}
-bool CanGo(const vector<vector<B>>& board, int ny, int nx)
-{
-    return (ny > 0 && ny <= n && nx > 0 && nx <= n);
+    return true;
 }
 void GoLeft(vector<vector<B>>& board)
 {
-    for (int i = 1; i <= n; ++i) {
-        for (int j = 2; j <= n; ++j) {
+    for (int i = 0; i < n; ++i) {
+        for (int j = 1; j < n; ++j) {
             int k = j;
-            while (CanGo(board, i, k - 1) && board[i][k].score) {
+            if (!board[i][k].score)continue;
+            while (k > 0 && board[i][k].score) {
                 if (board[i][k - 1].score == board[i][k].score && !board[i][k - 1].flag) {
                     board[i][k - 1].score *= 2;
                     board[i][k].score = 0;
                     board[i][k - 1].flag = true;
+                    c = true;
                     break;
                 }
                 else if (board[i][k - 1].score == 0) {
@@ -40,6 +45,7 @@ void GoLeft(vector<vector<B>>& board)
                 }
                 else
                     break;
+                c = true;
                 --k;
             }
         }
@@ -47,14 +53,16 @@ void GoLeft(vector<vector<B>>& board)
 }
 void GoRight(vector<vector<B>>& board)
 {
-    for (int i = 1; i <= n; ++i) {
-        for (int j = n - 1; j >= 1; --j) {
+    for (int i = 0; i < n; ++i) {
+        for (int j = n - 2; j >= 0; --j) {
             int k = j;
-            while (CanGo(board, i, k + 1) && board[i][k].score) {
+            if (!board[i][k].score)continue;
+            while (k < n - 1 && board[i][k].score) {
                 if (board[i][k + 1].score == board[i][k].score && !board[i][k + 1].flag) {
                     board[i][k + 1].score *= 2;
                     board[i][k].score = 0;
                     board[i][k + 1].flag = true;
+                    c = true;
                     break;
                 }
                 else if (board[i][k + 1].score == 0) {
@@ -63,6 +71,7 @@ void GoRight(vector<vector<B>>& board)
                 }
                 else
                     break;
+                c = true;
                 ++k;
             }
         }
@@ -70,22 +79,25 @@ void GoRight(vector<vector<B>>& board)
 }
 void GoUp(vector<vector<B>>& board)
 {
-    for (int j = 1; j <= n; ++j) {
-        for (int i = 2; i <= n; ++i) {
-            int k = i;
-            while (CanGo(board, k - 1, j) && board[k][j].score) {
-                if (board[k - 1][j].score == board[k][j].score && !board[k - 1][j].flag) {
-                    board[k - 1][j].score *= 2;
-                    board[k][j].score = 0;
-                    board[k - 1][j].flag = true;
+    for (int i = 0; i < n; ++i) {
+        for (int j = 1; j < n; ++j) {
+            int k = j;
+            if (!board[k][i].score)continue;
+            while (k > 0 && board[k][i].score) {
+                if (board[k - 1][i].score == board[k][i].score && !board[k - 1][i].flag) {
+                    board[k - 1][i].score *= 2;
+                    board[k][i].score = 0;
+                    board[k - 1][i].flag = true;
+                    c = true;
                     break;
                 }
-                else if (board[k - 1][j].score == 0) {
-                    board[k - 1][j].score = board[k][j].score;
-                    board[k][j].score = 0;
+                else if (board[k - 1][i].score == 0) {
+                    board[k - 1][i].score = board[k][i].score;
+                    board[k][i].score = 0;
                 }
                 else
                     break;
+                c = true;
                 --k;
             }
         }
@@ -93,64 +105,88 @@ void GoUp(vector<vector<B>>& board)
 }
 void GoDown(vector<vector<B>>& board)
 {
-    for (int j = 1; j <= n; ++j) {
-        for (int i = n - 1; i >= 1; --i) {
-            int k = i;
-            while (CanGo(board, k + 1, j)&& board[k][j].score) {
-                if (board[k + 1][j].score == board[k][j].score && !board[k + 1][j].flag) {
-                    board[k + 1][j].score *= 2;
-                    board[k][j].score = 0;
-                    board[k + 1][j].flag = true;
+    for (int i = 0; i < n; ++i) {
+        for (int j = n - 2; j >= 0; --j) {
+            int k = j;
+            if (!board[k][i].score)continue;
+            while (k < n - 1 && board[k][i].score) {
+                if (board[k + 1][i].score == board[k][i].score && !board[k + 1][i].flag) {
+                    board[k + 1][i].score *= 2;
+                    board[k][i].score = 0;
+                    board[k + 1][i].flag = true;
+                    c = true;
                     break;
                 }
-                else if (board[k + 1][j].score == 0) {
-                    board[k + 1][j].score = board[k][j].score;
-                    board[k][j].score = 0;
+                else if (board[k + 1][i].score == 0) {
+                    board[k + 1][i].score = board[k][i].score;
+                    board[k][i].score = 0;
                 }
                 else
                     break;
+                c = true;
                 ++k;
             }
         }
     }
 }
-int GetMax(const vector<vector<B>>& board) {
+void(*Move[4])(vector<vector<B>>&) = { GoLeft,GoRight,GoUp,GoDown };
+
+int GetMax(vector<vector<B>>& board)
+{
     int max_v = -1;
-    for (int i = 1; i <= n; ++i) {
-        for (int j = 1; j <= n; ++j) {
-            max_v = max(max_v, board[i][j].score);
+    for (auto& i : board)
+        for (auto& j : i) {
+            max_v = max(max_v, j.score);
+            j.flag = false;
         }
-    }
     return max_v;
 }
-function<void(vector<vector<B>>&)> f[4] = { GoLeft, GoRight, GoUp, GoDown };
-void go(vector<vector<B>>& board, int N = 0)
+vector<vector<B>> temp;
+void cpy(vector<vector<B>>& a, vector<vector<B>>& b)
 {
-    if (N == 5) {
-        res = max(res, GetMax(board));
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j)
+            a[i][j] = b[i][j];
+    }
+}
+void go(vector<vector<B>>& b, const int N = 0)
+{
+    auto res2 = GetMax(b);
+    auto res3 = res;
+    for (int i = 0; i < 5 - N; ++i)
+        res3 = res3 >> 1;
+    if (res3 > res2) {
+        return;
+    }
+    if (5 == N)
+    {
+        res = max(res, res2);
         return;
     }
     for (int i = 0; i < 4; ++i)
     {
-        vector<vector<B>> tempBoard = board;
-        f[i](tempBoard);
-        init(tempBoard);
-        go(tempBoard, N + 1);
+        c = false;
+        cpy(temp, b);
+        Move[i](temp);
+        if (!c)
+        {
+            res = max(res, GetMax(temp));
+            continue;
+        }
+        else
+            go(temp, N + 1);
     }
 }
-
 int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL); cout.tie(NULL);
     cin >> n;
-    b.resize(n + 1, vector<B>(n + 1));
-    for (int i = 1; i <= n; ++i) {
-        for (int j = 1; j <= n; ++j) {
-            cin >> b[i][j].score;
-        }
-    }
-    go(b);
-    cout << res << '\n';
+    board.resize(n, vector<B>(n));
+    temp.resize(n, vector<B>(n));
+    for (auto& i : board)
+        for (auto& j : i)
+            cin >> j.score;
+    go(board);
+    cout << max(res,GetMax(board));
 }
-

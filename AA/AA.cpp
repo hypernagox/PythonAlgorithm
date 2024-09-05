@@ -13,7 +13,7 @@ struct B {
 
 int n;
 int res;
-vector<vector<B>> board;
+B board[20][20];
 bool c;
 bool IsSame(const vector<vector<B>>& a, const vector<vector<B>>& b)
 {
@@ -25,7 +25,7 @@ bool IsSame(const vector<vector<B>>& a, const vector<vector<B>>& b)
     }
     return true;
 }
-void GoLeft(vector<vector<B>>& board)
+void GoLeft(B board[20][20])
 {
     for (int i = 0; i < n; ++i) {
         for (int j = 1; j < n; ++j) {
@@ -51,7 +51,7 @@ void GoLeft(vector<vector<B>>& board)
         }
     }
 }
-void GoRight(vector<vector<B>>& board)
+void GoRight(B board[20][20])
 {
     for (int i = 0; i < n; ++i) {
         for (int j = n - 2; j >= 0; --j) {
@@ -77,7 +77,7 @@ void GoRight(vector<vector<B>>& board)
         }
     }
 }
-void GoUp(vector<vector<B>>& board)
+void GoUp(B board[20][20])
 {
     for (int i = 0; i < n; ++i) {
         for (int j = 1; j < n; ++j) {
@@ -103,7 +103,7 @@ void GoUp(vector<vector<B>>& board)
         }
     }
 }
-void GoDown(vector<vector<B>>& board)
+void GoDown(B board[20][20])
 {
     for (int i = 0; i < n; ++i) {
         for (int j = n - 2; j >= 0; --j) {
@@ -129,48 +129,55 @@ void GoDown(vector<vector<B>>& board)
         }
     }
 }
-void(*Move[4])(vector<vector<B>>&) = { GoLeft,GoRight,GoUp,GoDown };
+void(*Move[4])(B board[20][20]) = { GoLeft,GoRight,GoUp,GoDown };
 
-int GetMax(vector<vector<B>>& board)
+int GetMax(B board[20][20])
 {
     int max_v = -1;
-    for (auto& i : board)
-        for (auto& j : i) {
-            max_v = max(max_v, j.score);
-            j.flag = false;
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            max_v = max(max_v, board[i][j].score);
+            board[i][j].flag = false;
         }
+    }
     return max_v;
 }
-vector<vector<B>> temp;
-void cpy(vector<vector<B>>& a, vector<vector<B>>& b)
+int cpy(B a[20][20], B b[20][20])
 {
+    int max_v = -1;
     for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < n; ++j)
+        for (int j = 0; j < n; ++j) {
             a[i][j] = b[i][j];
+            a[i][j].flag = false;
+        }
     }
+    return max_v;
 }
-void go(vector<vector<B>>& b, const int N = 0)
+int threshold_value[11];
+void go(B b[20][20], int N = 0)
 {
-    auto res2 = GetMax(b);
-    auto res3 = res;
-    for (int i = 0; i < 5 - N; ++i)
-        res3 = res3 >> 1;
-    if (res3 > res2) {
-        return;
-    }
-    if (5 == N)
-    {
-        res = max(res, res2);
+    int val = GetMax(b);
+
+    if (val <= threshold_value[N]) return; 
+
+    if (10 == N) {
+        res = max(res, val);
+        int v = res;
+        while (N> 0) {
+            threshold_value[N--] = v;
+            v /= 2;
+        }
         return;
     }
     for (int i = 0; i < 4; ++i)
     {
+        B temp[20][20];
         c = false;
         cpy(temp, b);
         Move[i](temp);
         if (!c)
         {
-            res = max(res, GetMax(temp));
+           // res = max(res, GetMax(temp));
             continue;
         }
         else
@@ -180,13 +187,12 @@ void go(vector<vector<B>>& b, const int N = 0)
 int main()
 {
     ios_base::sync_with_stdio(false);
-    cin.tie(NULL); cout.tie(NULL);
+    cin.tie(NULL); cout.tie(NULL);  
     cin >> n;
-    board.resize(n, vector<B>(n));
-    temp.resize(n, vector<B>(n));
-    for (auto& i : board)
-        for (auto& j : i)
-            cin >> j.score;
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j)
+            cin >> board[i][j].score;
+    }
     go(board);
     cout << max(res,GetMax(board));
 }

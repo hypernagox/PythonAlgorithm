@@ -1,36 +1,40 @@
 #include <iostream>
 #include <algorithm>
+#include <ranges>
+#include <map>
+#include <vector>
+#include <queue>
 using namespace std;
-int dp[16][1 << 16];
-int g[16][16];
-uint16_t n;
-uint16_t DONE;
-int go(uint16_t cur, uint16_t visited)
-{
-    if (visited == DONE) return g[cur][0];
-    if (dp[cur][visited])return dp[cur][visited];
-    dp[cur][visited] = 987654321;
-    for (int i = 0; i < n; ++i) {
-        if (g[cur][i] == 987654321)continue;
-        if ((visited & (1 << i)) == (1 << i))continue;
-        dp[cur][visited] = min(dp[cur][visited], g[cur][i] + go(i, visited | (1 << i)));
-    }
-    return dp[cur][visited];
-}
+uint64_t dp[101][11];
+int n;
 int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL); cout.tie(NULL);
     cin >> n;
-    DONE = (1 << n) - 1;
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < n; ++j) {
-            int x; cin >> x;
-            if (x)
-                g[i][j] = x;
-            else
-                g[i][j] = 987654321;
+    
+    // i번째 , k로 끝나는 수
+    // dp[i][k] = dp[i-1][k-1] + dp[i-1][k+1];
+    for (int i = 0; i <= 9; ++i) {
+        dp[1][i] = 1;
+        //dp[0][i] = 1;
+    }
+    dp[1][0] = 0;
+    for (int i = 2; i <= n; ++i) {
+        for (int j = 0; j <= 9; ++j) {
+            if (j == 0) {
+                dp[i][j] = dp[i - 1][1] % 1000000000;
+            }
+            else if (j == 9) {
+                dp[i][j] = dp[i - 1][8] % 1000000000;
+            }
+            else {
+                dp[i][j] = ((dp[i - 1][j - 1] % 1000000000) + (dp[i - 1][j + 1] % 1000000000)) % 1000000000;
+            }
         }
     }
-    cout << go(0, 1);
+    uint64_t res = 0;
+    for (int i = 0; i <= 9; ++i)
+        res += (dp[n][i] % 1000000000);
+    cout << res % 1000000000;
 }

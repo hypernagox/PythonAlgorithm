@@ -17,7 +17,7 @@ int r, c;
 struct Block
 {
 	char type;
-	int time = 1<<20;
+	int time = 1 << 20;
 };
 Block maze[1001][1001];
 bool RangeCheck(const int y, const int x)
@@ -34,37 +34,40 @@ struct Data
 };
 void SpreadFire()
 {
-	queue<pair<int, int>> q;
-	for (int i = 0; i < r; ++i) 
+	queue<Data> q;
+	for (int i = 0; i < r; ++i)
 	{
 		for (int j = 0; j < c; ++j)
 		{
-			if (maze[i][j].type == 'F') 
+			if ('F' == maze[i][j].type)
 			{
-				maze[i][j].time = 0;
-				q.emplace(i, j);
+				q.emplace(i, j, 0, 0);
 			}
 		}
 	}
 	while (!q.empty())
 	{
-		const auto [y, x] = q.front(); q.pop();
+		const auto [y, x, cost, time] = q.front();
+		q.pop();
 		for (int k = 0; k < 4; ++k)
 		{
-			int ny = y + dy[k], nx = x + dx[k];
-			if (!RangeCheck(ny, nx)) continue;
-			if (maze[ny][nx].type == '#') continue;
-			if (maze[ny][nx].time > maze[y][x].time + 1) 
+			const auto ny = y + dy[k];
+			const auto nx = x + dx[k];
+			if (!RangeCheck(ny, nx))
 			{
-				maze[ny][nx].time = maze[y][x].time + 1;
-				q.emplace(ny, nx);
+				continue;
+			}
+			if (visited[ny][nx])continue;
+			visited[ny][nx] = true;
+			if ('#' != maze[ny][nx].type)
+			{
+				maze[ny][nx].type = 'F';
+				maze[ny][nx].time = min(maze[ny][nx].time, maze[y][x].time + 1);
+				q.emplace(ny, nx, 0, time + 1);
 			}
 		}
 	}
 }
-
-
-
 int bfs(const int y, const int x)
 {
 	queue<Data> q;
@@ -96,21 +99,13 @@ int bfs(const int y, const int x)
 			{
 				continue;
 			}
-			//if ('F' == maze[ny][nx].type)
-			//{
-			//	if (next_time >= maze[ny][nx].time)
-			//	{
-			//		continue;
-			//	}
-			//}
-
 			visited[ny][nx] = true;
 			q.emplace(ny, nx, cost + 1, next_time);
 		}
 	}
 	return -1;
 }
-int GO(const int y,const int x)
+int GO(const int y, const int x)
 {
 	SpreadFire();
 	memset(visited, 0, sizeof(visited));

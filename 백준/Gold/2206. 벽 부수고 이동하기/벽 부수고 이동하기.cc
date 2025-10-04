@@ -7,7 +7,6 @@ constexpr const int dx[]{ 0,1,0,-1 };
 int n, m;
 char maze[1001][1001];
 int visited[2][1001][1001];
-vector<pi> obstacles;
 queue<pair<bool,pi>> q;
 bool CanGo(const int y, const int x)
 {
@@ -73,16 +72,11 @@ int main()
 {
 	ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
 	cin >> n >> m;
-	obstacles.reserve(n * m);
 	for (int i = 0; i < n; ++i)
 	{
 		for (int j = 0; j < m; ++j)
 		{
 			cin >> maze[i][j];
-			if ('1' == maze[i][j])
-			{
-				obstacles.emplace_back(i, j);
-			}
 		}
 	}
 	cout << sol();

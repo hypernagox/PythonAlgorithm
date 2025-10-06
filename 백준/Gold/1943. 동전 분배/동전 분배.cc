@@ -5,7 +5,7 @@ using pi = pair<int, int>;
 using pll = pair<ll, ll>;
 bool flag = false;
 set<int> visited;
-void GO(const long long target_val,vector<pi>& coins, const long long cur_val = 0)
+void GO(const int target_val,vector<pi>& coins, const int cur_val = 0)
 {
 	if (cur_val == target_val)
 	{
@@ -13,6 +13,7 @@ void GO(const long long target_val,vector<pi>& coins, const long long cur_val = 
 		return;
 	}
 	if (!visited.emplace(cur_val).second)return;
+	if (cur_val > target_val)return;
 	for (int i = 0; i < coins.size(); ++i)
 	{
 		if (coins[i].second == 0)continue;

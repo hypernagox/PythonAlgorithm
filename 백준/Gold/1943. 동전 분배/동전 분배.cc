@@ -16,6 +16,7 @@ void GO(const int target_val,vector<pi>& coins, const int cur_val = 0)
 	if (cur_val > target_val)return;
 	for (int i = 0; i < coins.size(); ++i)
 	{
+		if (flag)return;
 		if (coins[i].second == 0)continue;
 		--coins[i].second;
 		GO(target_val, coins, cur_val + coins[i].first);

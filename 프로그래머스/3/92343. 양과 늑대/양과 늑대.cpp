@@ -10,8 +10,8 @@ void GO(const int cur_node, int sheep, int wolf, set<int> visitable_list)
 {
     if (infos[cur_node])++wolf;
     else ++sheep;
-    ans = max(ans, sheep);
     if (sheep <= wolf)return;
+     ans = max(ans, sheep);
     visitable_list.erase(cur_node); // 이 리스트를 이용해서 나를 온거니 나를 날린다.
     set<int> deliver_list_to_child{ visitable_list }; 
     for (const auto next : adj[cur_node])deliver_list_to_child.emplace(next); // 현재까지 정보에 지금 나로부터 갈수있는 녀석들을 추가

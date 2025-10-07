@@ -31,3 +31,19 @@ https://www.acmicpc.net/problem/22866
 https://www.hackerrank.com/challenges/hackerland-radio-transmitters/problem?isFullScreen=true
 
 --------------------------------------------------------------------------------------------------------------------------
+
+
+-----------------------------------------------------   2025/10/07   -----------------------------------------------------
+
+백준 2169 로봇 조종하기
+https://www.acmicpc.net/problem/2169
+
+백준 3687 성냥개비
+https://www.acmicpc.net/problem/3687
+
+프로그래머스 다단계 칫솔 판매
+https://school.programmers.co.kr/learn/courses/30/lessons/77486
+
+프로그래머스 파괴되지않은 건물
+https://school.programmers.co.kr/learn/courses/30/lessons/92344
+--------------------------------------------------------------------------------------------------------------------------

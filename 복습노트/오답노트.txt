@@ -47,6 +47,25 @@ https://www.hackerrank.com/challenges/hackerland-radio-transmitters/problem?isFu
 
 
 
+-----------------------------------------------------   2025/10/07   -----------------------------------------------------
+
+백준 2169 로봇 조종하기
+https://www.acmicpc.net/problem/2169
+DP 왼쪽에서한번 오른쪽에서 한번..
+
+백준 3687 성냥개비
+https://www.acmicpc.net/problem/3687
+dp[ K ]  ( K개 성냥 개비를 써서 만들 수 있는 최소값 ) = dp[ K - x ] (x는 2~7) K개에서 x개만큼 가져와서 k - x개로 만들 수 있는 최소값을 한자릿수 올리고 때온 녀석으로 만들수있는 한자리를 맨 뒤에 추가
+
+프로그래머스 파괴되지않은 건물
+https://school.programmers.co.kr/learn/courses/30/lessons/92344
+누적합은 K , -K 로 구간에 마크만 해두면 구간합 구하면서 알아서 맞춰지는게 특이함
+
+프로그래머스 다단계 칫솔 판매
+https://school.programmers.co.kr/learn/courses/30/lessons/77486
+이건 좀 다시 봐야함
+
+--------------------------------------------------------------------------------------------------------------------------
 
 
 

@@ -15,7 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AA.cpp">
+    <ClCompile Include="backjoon.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="programmers.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

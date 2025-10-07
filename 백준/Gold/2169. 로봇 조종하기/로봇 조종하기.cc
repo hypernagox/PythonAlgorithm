@@ -34,10 +34,8 @@ int main()
 		right_dir[c - 1] = dp[i - 1][c - 1] + mat[i][c - 1];
 		for (int j = 1; j < c; ++j)
 		{
-			const int L = j;
-			const int R = c - 1 - j;
-			left_dir[L] = max(dp[i - 1][L], left_dir[L - 1]) + mat[i][L];
-			right_dir[R] = max(dp[i - 1][R], right_dir[R + 1]) + mat[i][R];
+			left_dir[j] = max(dp[i - 1][j], left_dir[j - 1]) + mat[i][j];
+			right_dir[c - 1 - j] = max(dp[i - 1][c - 1 - j], right_dir[c - j]) + mat[i][c - 1 - j];
 		}
 		for (int j = 0; j < c; ++j)
 		{

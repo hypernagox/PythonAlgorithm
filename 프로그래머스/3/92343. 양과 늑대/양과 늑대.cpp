@@ -1,29 +1,32 @@
-#include <iostream>
-#include <algorithm>
-#include <string>
-#include <vector>
-#include <set>
+#include <bits/stdc++.h>
 using namespace std;
-bool visited[18];
-set<int> ans;
-void DFS(
-      const vector<int>& info
-    , const vector<vector<int>>& edges
-    , const int yang
-    , const int wolf)noexcept {
-    if (yang <= wolf)return;
-    ans.emplace(yang);
-    for (const auto& v : edges) {
-        if (visited[v[0]] && !visited[v[1]]) {
-            visited[v[1]] = true;
-            if (info[v[1]])DFS(info, edges, yang, wolf + 1);
-            else DFS(info, edges, yang + 1, wolf);
-            visited[v[1]] = false;
-        }
+using ll = long long;
+using pi = pair<int, int>;
+using pll = pair<ll, ll>;
+vector<int> adj[18];
+vector<int> infos;
+int ans;
+void GO(const int cur_node, int sheep, int wolf, set<int> visitable_list)
+{
+    if (infos[cur_node])++wolf;
+    else ++sheep;
+    ans = max(ans, sheep);
+    if (sheep <= wolf)return;
+    visitable_list.erase(cur_node); // 이 리스트를 이용해서 나를 온거니 나를 날린다.
+    set<int> deliver_list_to_child{ visitable_list }; 
+    for (const auto next : adj[cur_node])deliver_list_to_child.emplace(next); // 현재까지 정보에 지금 나로부터 갈수있는 녀석들을 추가
+    for (const auto child : deliver_list_to_child)
+    {
+        GO(child, sheep, wolf, deliver_list_to_child);// 자식에게 지금까지 방문 가능한 노드들을 전달한다.
     }
 }
-int solution(vector<int> info, vector<vector<int>> edges) {
-    visited[0] = true;
-    DFS(info, edges, 1, 0);
-    return *ans.rbegin();
+int solution(vector<int> info, vector<vector<int>> edges)
+{
+    info.swap(infos);
+    for (const auto& edge : edges)
+    {
+        adj[edge[0]].emplace_back(edge[1]);
+    }
+    GO(0, 0, 0, {});
+    return ans;
 }

@@ -16,33 +16,30 @@ int main()
 {
 	ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
 	int n, k, m; cin >> n >> k >> m;
-	//int l = 1;
-	//int r = 1 << 20;
-	vector<int> v;
+	int l = 1;
+	int r = 1 << 30;
+	vector<int> gimbob;
 	for (int i = 0; i < n; ++i) 
 	{
 		int x; cin >> x;
 		if (x >= 2 * k)x -= 2 * k;
 		else if (x >= k)x -= k;
 		else x = 0;
-		v.emplace_back(x);
+		gimbob.emplace_back(x);
 	}
-	int l = 1; int h = 1000000000;
-	int result = -1;
-	while (l <= h) {
-		int mid = (l + h) / 2;
-		int cnt = 0;
-		for (int i = 0; i < n; i++)
+	int ans = -1;
+	while (l < r)
+	{
+		const int mid = (l + r) / 2;
+		if (Check(gimbob, mid,m))
 		{
-			cnt += v[i] / mid;
-		}
-		if (m > cnt) {
-			h = mid - 1;
-		}
-		else {
-			result = mid;
+			ans = max(ans, mid);
 			l = mid + 1;
 		}
+		else
+		{
+			r = mid;
+		}
 	}
-	cout << result;
+	cout << ans;
 }

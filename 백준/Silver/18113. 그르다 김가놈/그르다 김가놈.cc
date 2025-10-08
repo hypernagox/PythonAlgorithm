@@ -17,7 +17,7 @@ int main()
 	ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
 	int n, k, m; cin >> n >> k >> m;
 	int l = 1;
-	int r = 1 << 30;
+	int r = 1;
 	vector<int> gimbob;
 	for (int i = 0; i < n; ++i) 
 	{
@@ -25,8 +25,10 @@ int main()
 		if (x >= 2 * k)x -= 2 * k;
 		else if (x >= k)x -= k;
 		else x = 0;
+		r = max(r, x);
 		gimbob.emplace_back(x);
 	}
+    ++r;
 	int ans = -1;
 	while (l < r)
 	{

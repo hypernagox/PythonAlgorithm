@@ -46,9 +46,7 @@ int solution(vector<vector<string>> relation)
 		{
 			for (const auto& list : key_list)
 			{
-				string temp;
-				set_intersection(list.begin(), list.end(), c.begin(), c.end(), back_inserter(temp));
-				if (temp == list)
+				if (includes(c.begin(), c.end(),list.begin(), list.end()))
 				{
 					flag = false;
 					break;

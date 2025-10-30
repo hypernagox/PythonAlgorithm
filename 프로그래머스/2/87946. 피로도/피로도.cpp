@@ -2,29 +2,21 @@
 #include <vector>
 #include <algorithm>
 using namespace std;
-
+bool visited[10];
+int res = 0;
+int GO(const vector<vector<int>>& dungeons, const int K, const int cnt = 0)
+{
+    for(int i=0;i<dungeons.size();++i)
+    {
+        if(visited[i])continue;
+        if(K < dungeons[i][0])continue;
+        visited[i]=true;
+        GO(dungeons,K - dungeons[i][1], cnt + 1);
+        visited[i]=false;
+    }
+    return res = max(res,cnt);
+}
 int solution(int k, vector<vector<int>> dungeons) 
 {
-    vector<pair<int,int>> d;
-    for(const auto& v:dungeons)
-    {
-        d.emplace_back(v[0],v[1]);
-    }
-    sort(d.begin(),d.end());
-    int ans = 0;
-    do
-    {
-        int K =k;
-        int cnt = 0;
-        for(const auto [min_piro, somo_piro]:d)
-        {
-            if(K >= min_piro)
-            {
-                K -= somo_piro;
-                ++cnt;
-            }
-        }
-        ans = max(ans , cnt);
-    }while(next_permutation(d.begin(),d.end()));
-    return ans;
+    return GO(dungeons,k);
 }

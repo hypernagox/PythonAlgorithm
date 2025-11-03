@@ -1,46 +1,45 @@
 #include <string>
 #include <vector>
+#include <set>
 #include <map>
-#include <unordered_set>
-#include <iostream>
 using namespace std;
 
 vector<int> solution(vector<string> gems) 
 {
-    vector<int> answer(2);
-    const unordered_set<string> us{gems.begin(),gems.end()};
-    map<string,int> m;
+    const set<string> s{gems.begin(),gems.end()};
     int b = 0;
     int e = 0;
+    map<string,int> m;
     for(const auto& g:gems)
     {
         ++m[g];
-        if(m.size() == us.size())break;
+        if(m.size() == s.size())break;
         ++e;
     }
-    int d = e - b;
-    answer[0]=b + 1;
-    answer[1]=e + 1;
+   // --e;
+    int d = e-b;
+    vector<int> answer(2);
+    answer[0]=b+1;
+    answer[1]=e+1;
     while(e < gems.size())
     {
-        const auto& g = gems[b];
-         ++b;
-        if(0 == --m[g])
+        if(0 == --m[gems[b]])
         {
             ++e;
-            m.erase(g);
-            while(e < gems.size())
+            m.erase(gems[b]);
+            while(e < gems.size() && m.size() != s.size())
             {
                 ++m[gems[e]];
-                if(m.size() == us.size())break;
+                if(m.size() == s.size())break;
                 ++e;
             }
         }
-        if(d > e-b)
+        ++b;
+        if(d > e - b)
         {
-            answer[0]=b + 1;
-            answer[1]=e + 1;
-            d = e-b;
+            d=e-b;
+            answer[0]=b+1;
+            answer[1]=e+1;
         }
     }
     return answer;

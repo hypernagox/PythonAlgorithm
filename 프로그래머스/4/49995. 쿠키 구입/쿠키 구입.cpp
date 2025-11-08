@@ -1,31 +1,36 @@
 #include <string>
 #include <vector>
+
 using namespace std;
-int solution(vector<int> cookie)
+
+int solution(vector<int> cookie) 
 {
-    int ans = 0;
+    int answer = 0;
     for(int i=0;i<cookie.size() - 1;++i)
     {
-        int l = i;
-        int r = l + 1;
-        int left = cookie[l];
-        int right = cookie[r];
+        int ai=i;
+        int bi=i+1;
+        int as = cookie[ai];
+        int bs =cookie[bi];
         for(;;)
         {
-            if(l < 0 || r >= cookie.size())break;
-            if(left == right) ans = max(ans,left);
-            if(left <= right)
-            {
-                if(l <=0)break;
-                left+= cookie[--l];
-            }
-            else if(left >= right)
-            {
-                if(r>=cookie.size()-1)break;
-                right += cookie[++r];
-            }
-            
+        if(as == bs)
+        {
+            answer =max(answer,as);
+           // break;
+        }
+        if(ai > 0 && as <= bs)
+        {
+            --ai;
+            as+=cookie[ai];
+        }
+        else if(bi < cookie.size() - 1 && as >= bs)
+        {
+            ++bi;
+            bs += cookie[bi];
+        }
+        else break;
         }
     }
-    return ans;
+    return answer;
 }

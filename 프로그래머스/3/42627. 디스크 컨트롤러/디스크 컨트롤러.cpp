@@ -5,54 +5,60 @@ using namespace std;
 struct Task
 {
     int task_num;
-    int request_time;
-    int require_time;
-    Task(int a,int b,int c):task_num{a},request_time{b},require_time{c}{}
-    const auto operator<(const Task& task)const {
-        if(require_time == task.require_time)
-        {
-            if(request_time == task.request_time)
-            {
-                return task_num > task.task_num;
-            }
-            return request_time > task.request_time;
-        }
-        return require_time > task.require_time;
-    }
-    
+    int start_time;
+    int need_time;
+    Task(int a,int b,int c):task_num{a},start_time{b},need_time{c}{}
 };
-struct CMP
+struct CMP1
 {
-    const auto operator()(const Task& a, const Task& b)const{
-        return a.request_time > b.request_time;
+    const auto operator()(const Task& a,const Task& b)const{
+        if(a.need_time == b.need_time)
+        {
+            if(a.start_time == b.start_time)
+            {
+                return a.task_num > b.task_num;
+            }
+            return a.start_time > b.start_time;
+        }
+        return a.need_time > b.need_time;
+    }
+};
+struct CMP2
+{
+    const auto operator()(const Task& a,const Task& b)const{
+        return a.start_time > b.start_time;
     }
 };
 int solution(vector<vector<int>> jobs) 
 {
     int answer = 0;
-    priority_queue<Task> pq;
-    priority_queue<Task,vector<Task>,CMP> arrival;
+    priority_queue<Task,vector<Task>,CMP1> pq;
+     priority_queue<Task,vector<Task>,CMP2> arrived_task;
     for(int i=0;i<jobs.size();++i)
     {
-        arrival.emplace(i,jobs[i][0],jobs[i][1]);
+        arrived_task.emplace(i,jobs[i][0],jobs[i][1]);
     }
     int cur_time = 0;
-    while(!arrival.empty() || !pq.empty())
+    while(!arrived_task.empty() || !pq.empty())
     {
-        while(!arrival.empty() && cur_time >= arrival.top().request_time)
+        while(!arrived_task.empty() && cur_time >= arrived_task.top().start_time)
         {
-            pq.emplace(arrival.top());
-            arrival.pop();
+            pq.emplace(arrived_task.top());arrived_task.pop();
         }
+        // 타임라인상 더 할일이 없다면 다음 일 할 시간으로 점프
         if(pq.empty())
         {
-            cur_time = arrival.top().request_time;
-           // arrival.pop();
+            cur_time = arrived_task.top().start_time;
             continue;
         }
-        Task t = pq.top(); pq.pop();
-        cur_time += t.require_time;
-        answer += (cur_time - t.request_time);
+       //while(!pq.empty())
+       {
+           const auto task = pq.top();pq.pop();
+         //  cur_time += task.need_time;
+           answer += max(cur_time - task.start_time,0);
+           answer += task.need_time;
+          cur_time += task.need_time;
+       }
     }
     return answer / jobs.size();
 }

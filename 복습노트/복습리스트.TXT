@@ -1,4 +1,4 @@
-*s2..g4 (#binary_search | #greedy | #two_pointer | #dp | #backtracking) -@$me %ko s:500
+*s2..g5 (#binary_search | #greedy | #two_pointer | #dp | #backtracking) -@$me %ko s:2000
 
 오답리스트
 

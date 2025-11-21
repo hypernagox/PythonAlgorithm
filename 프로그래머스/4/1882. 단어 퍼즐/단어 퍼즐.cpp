@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 int dp[20001];
-constexpr const int INF = 987654321;
+constexpr const int INF = 987654320;
 int solution(vector<string> strs, string t)
 {
     fill(dp,dp+20001,INF);

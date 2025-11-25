@@ -1,44 +1,45 @@
+#include <string>
+#include <vector>
 #include <bits/stdc++.h>
 using namespace std;
-using ll = long long;
-using ull = unsigned long long;
-using pi = pair<int, int>;
-using pll = pair<ll, ll>;
-int solution(int alp, int cop, vector<vector<int>> problems)
+int dp[151][151]; // 현재[알고력][코딩력]일때 최대도달을 위해 필요한 최단시간
+int maxAlp;
+int maxCop;
+int sol(int alp, int cop, const vector<vector<int>>& problems)
 {
-    // dp [i][j] -> 알고력 i 코딩력 j을 얻기 위해 걸리는 최단시간
-    int max_al = alp;
-    int max_cop = cop;
-    for (const auto& p : problems)
-    {
-        // 최대로 필요한 알고력과 코딩력
-        max_al = max(max_al, p[0]);
-        max_cop = max(max_cop, p[1]);
+    alp = min(alp,maxAlp);
+    cop = min (cop,maxCop);
+    if(alp >= maxAlp && cop >= maxCop)return 0;
+    auto& ref = dp[alp][cop];
+    if(ref)return ref;
+    ref = 987654321;
+    if(alp < maxAlp)
+    {  // 걍 알고력 올리기
+        ref = min(ref, 1 + sol(alp+1,cop,problems));
     }
-    if (alp >= max_al && cop >= max_cop)return 0;
-    vector<vector<int>> dp(152, vector<int>(152, 1 << 20));
-    dp[alp][cop] = 0; // 지금가지고있는 알고력 코딩력은 0비용이들음 
-    for (int al = alp; al <= max_al; ++al)
+    if(cop < maxCop)
+    {// 걍 코딩력 올리기
+        ref = min(ref, 1 + sol(alp,cop + 1,problems));
+    }
+    // 지금 풀 수 있는거 풀어보기
+    for(const auto& p:problems)
     {
-        for (int co = cop; co <= max_cop; ++co)
+        if(alp >= p[0] && cop >= p[1])
         {
-            // 1 늘리려면 지금거에서 시간 1추가하거나 이전에 더 좋은 값 있거나
-            dp[al][co + 1] = min(dp[al][co + 1], dp[al][co] + 1);
-            dp[al + 1][co] = min(dp[al + 1][co], dp[al][co] + 1);
-            for (const auto& p : problems)
-            {
-                // 문제를 풀 수 있다면
-                if (p[0] <= al && p[1] <= co)
-                {
-                    const auto next_al = min(max_al, al + p[2]); // 넘어가는거 방지
-                    const auto next_co = min(max_cop, co + p[3]);
-                    // 기존에 알던거 또는 지금 최단값에서 필요시간 더한거
-                    dp[next_al][next_co]
-                        = min(dp[next_al][next_co], dp[al][co] + p[4]);
-                }
-            }
+            const auto na = alp + p[2];
+            const auto nc = cop + p[3];
+            ref=min(ref,p[4]+sol(na,nc,problems));
         }
     }
-    return dp[max_al][max_cop];
+    return ref;
 }
-
+int solution(int alp, int cop, vector<vector<int>> problems) 
+{
+    int answer = 0;
+    for(const auto& p :problems)
+    {
+        maxAlp = max(maxAlp,p[0]);
+        maxCop = max(maxCop,p[1]);
+    }
+    return sol(alp,cop,problems);
+}

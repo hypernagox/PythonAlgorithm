@@ -1,20 +1,30 @@
 #include <bits/stdc++.h>
 using namespace std;
 constexpr const int INF = 987654321;
+vector<pair<int, int>> v;
 int memo[10001];
-int GO(const int cur_money, const int n, const int idx,const int cur_sum,const vector<pair<int,int>>& coins)
+int n, k;
+int GO(const int cur_money)
 {
     if (cur_money < 0)return -INF;
-   // if (idx == n)return 0;
     auto& ref = memo[cur_money];
     if (ref)return ref;
-    // 지금거 산다
     int best = 0;
-    for (const auto [cal, cost] : coins)
+    for (const auto [cal, cost]: v)
     {
-        best = max(best, GO(cur_money - cost, n, idx, cur_sum + coins[idx].first, coins) + cal);
+        best = max(best, GO(cur_money - cost) + cal);
     }
     return ref = best;
+}
+int GetMoney(const string_view str)
+{
+    string temp;
+    for (const auto ch : str)
+    {
+        if (ch == '.')continue;
+        temp.push_back(ch);
+    }
+    return stoi(temp);
 }
 int main()
 {
@@ -22,31 +32,19 @@ int main()
     cin.tie(NULL); cout.tie(NULL);
     for (;;)
     {
-        int n;
-        string m;
-        cin >> n >> m;
+        cin >> n;
         if (n == 0)break;
+        v.clear();
+        memset(memo, 0, sizeof(memo));
         string temp;
-        for (const auto ch : m)
-        {
-            if (ch == '.')continue;
-            temp.push_back(ch);
-        }
-        const int money = stoi(temp);
-        vector<pair<int,int>> coins;
+        cin >> temp;
+        const auto m = GetMoney(temp);
         for (int i = 0; i < n; ++i)
         {
-            int c;
-            temp.clear();
-            cin >> c >> m;
-            for (const auto ch : m)
-            {
-                if (ch == '.')continue;
-                temp.push_back(ch);
-            }
-            coins.emplace_back(c, stoi(temp));// 칼로리:가격
+            int a;
+            cin >> a >> temp;
+            v.emplace_back(a, GetMoney(temp));
         }
-        cout << GO(money, n, 0, 0, coins) << '\n';
-        memset(memo, 0, sizeof(memo));
+        cout << GO(m) << '\n';
     }
 }

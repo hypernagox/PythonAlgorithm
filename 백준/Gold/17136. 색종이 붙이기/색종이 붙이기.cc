@@ -1,61 +1,66 @@
-#include <iostream>
-#include <algorithm>
+#include <bits/stdc++.h>
 using namespace std;
-int map[10][10];
-int paper[5]{ 5,5,5,5,5 };
-int res = 100;
-bool check(int y,int x,int size)
+using ll = long long;
+using pi = pair<int, int>;
+using pll = pair<ll, ll>;
+int paper[10][10];
+int capacity[5]{ 5,5,5,5,5 };
+bool IsOk(const int y, const int x)
 {
-	for (int i = y; i <= y + size; ++i) {
-		for (int j = x; j <= x + size; ++j) {
-			if (!map[i][j])
-				return false;
+	if (y < 0 || x < 0 || y >= 10 || x >= 10)return false;
+	return true;
+}
+bool Check(const int y,const int x, const int size)
+{
+	for (int i = y; i < y + size; ++i)
+	{
+		for (int j = x; j < x + size; ++j)
+		{
+			if (!IsOk(i, j))return false;
+			if (0 == paper[i][j])return false;
 		}
 	}
 	return true;
 }
-void fiilPaper(int y, int x,int size, int val)
+void FillPaper(const int y, const int x, const int size, const int on_off)
 {
-	for (int i = y; i <= y + size; ++i) {
-		for (int j = x; j <= x + size; ++j) {
-			map[i][j] = val;
+	for (int i = y; i < y + size; ++i)
+	{
+		for (int j = x; j < x + size; ++j)
+		{
+			paper[i][j] = on_off;
 		}
 	}
 }
-bool isOk(int y, int x)
+bool IsFinish()
 {
-	if (x >= 10 || y >= 10)
-		return false;
+	for (auto& i : paper)for (auto& j : i)if (j)return false;
 	return true;
 }
-bool isFinish()
+int res = 987654321;
+void GO(const int cnt = 0)
 {
-	for (auto& i : map) {
-		for (auto& j : i) {
-			if (j)
-				return false;
-		}
-	}
-	return true;
-}
-void dfs(int cnt)
-{
-	if (res < cnt)
-		return;
-	if (isFinish()) {
+	if (IsFinish())
+	{
 		res = min(res, cnt);
 		return;
 	}
-	for (int i = 0; i < 10; ++i) {
-		for (int j = 0; j < 10; ++j) {
-			if (map[i][j]) {
-				for (int k = 4; k >= 0; --k) {
-					if (paper[k] > 0 && check(i, j, k) && isOk(i + k, j + k)) {
-						--paper[k];
-						fiilPaper(i, j, k, 0);
-						dfs(cnt + 1);
-						++paper[k];
-						fiilPaper(i, j, k, 1);
+	for (int i = 0; i < 10; ++i)
+	{
+		for (int j = 0; j < 10; ++j)
+		{
+			if (paper[i][j])
+			{
+				for (int size = 1; size <= 5; ++size)
+				{
+					// 사이즈별로 붙여봄
+					if (Check(i, j, size) && capacity[size - 1])
+					{
+						FillPaper(i, j, size, 0);
+						capacity[size - 1]--;
+						GO(cnt + 1);
+						capacity[size - 1]++;
+						FillPaper(i, j, size, 1);
 					}
 				}
 				return;
@@ -65,11 +70,9 @@ void dfs(int cnt)
 }
 int main()
 {
-	for (auto& i : map) {
-		for (auto& j : i)
-			cin >> j;
-	}
-	dfs(0);
-	res = 100==res ? -1 : res;
-	cout << res << '\n';
+	ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
+	for (auto& i : paper)for (auto& j: i)cin >> j;
+	GO();
+	if (res == 987654321)cout << -1;
+	else cout << res;
 }

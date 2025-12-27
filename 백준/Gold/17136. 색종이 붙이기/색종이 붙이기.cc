@@ -46,6 +46,10 @@ void TryFill(const int y, const int x, const int size, const bool fill_flag)
 int ans = INF;
 void GO(const int cur_count)
 {
+    if (cur_count >= ans)
+    {
+        return;
+    }
     if (IsFinish())
     {
         ans = min(ans, cur_count);

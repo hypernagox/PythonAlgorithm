@@ -1,42 +1,40 @@
 #include <bits/stdc++.h>
 using namespace std;
-using ll = long long;
-using ull = unsigned long long;
-using pi = pair<int, int>;
-using pll = pair<ll, ll>;
 vector<int> top;
 int N;
-constexpr const ll MOD = 10007;
-ll memo[100001][2];
-long long GO(const int i, const int right)
+constexpr const int MOD = 10007;
+int memo[100001][2];
+int GO(const int idx,const bool right_flag)
 {
-    if(N == i)
+    if(idx == N)
     {
-        if(right)
-        {
-            return 1;
-        }
-        else
-        {
-            return top[i] ? 3 : 2;
-        }
+        if(right_flag)return 1;
+        else return top[idx] ? 3 : 2;
     }
-    auto& ref = memo[i][right];
+    auto& ref = memo[idx][right_flag];
     if(ref)return ref;
-    const int k1 = (top[i] ? 2 : 1);
-    const int k2 = (top[i] ? 3 : 2);
-    if(right)
+    if(right_flag)
     {
-        return ref = (GO(i+1,0) + GO(i+1,1)) % MOD;
+        return ref = (GO(idx+1,0) + GO(idx+1,1)) % MOD;
     }
     else
     {
-       return ref = (GO(i+1,0) * k2 + GO(i+1,1) * k1) % MOD;
+        if(top[idx])
+        {
+           return ref = (GO(idx+1,1) * 2 + GO(idx+1,0) * 3) % MOD;
+        }
+        else
+        {
+           return ref = (GO(idx+1,1) + GO(idx+1,0) * 2) % MOD;
+        }
     }
+    
+    
+   
 }
-int solution(int n, vector<int> tops)
+int solution(int n, vector<int> tops) 
 {
+    N = n - 1;
     top.swap(tops);
-    N=n - 1;
-    return (GO(0,0) + GO(0,1)) %MOD;
+    return (GO(0,0) + GO(0,1))%MOD;
 }

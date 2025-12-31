@@ -6,58 +6,48 @@ using pll = pair<ll, ll>;
 constexpr const int INF = 987654321;
 int n;
 int k;
-vector<int> chu;
-vector<int> orb;
-bool visited[80002];
-int memo[62][80002];
-int GO(const int i,const int left,const int right)
+int chu[31];
+int orb[8];
+int memo[31][65001];
+// idx부터 고려하고 차이가 diff일때 가능한가?
+int GO(const int idx, const int diff)
 {
-	auto& ref = memo[i][abs(left - right)];
+	if (idx == n)
+	{
+		if (0 == diff)return 1;
+		else return 0;
+	}
+	if (0 == diff)return 1;
+	auto& ref = memo[idx][diff];
 	if (-1 != ref)return ref;
-	ref = visited[abs(left - right)] = true;
-	if (i == chu.size())return 0;
-	
-	// 왼쪽에 놓기
-	ref |= GO(i + 1, left + chu[i], right); 
+	int flag = 0;
+	// 추를 더 무거운 곳에 올려 놓는다.
+	flag |= GO(idx + 1, diff + chu[idx]);
 
-	// 오른쪽에 놓기
-	ref |= GO(i + 1, left, right + chu[i]);
+	// 추를 사용하지 않는다.
+	flag |= GO(idx + 1, diff);
 
-	// 안놓기
-	ref |= GO(i + 1, left, right);
-	return ref;
+	// 추를 현재 더 가벼운 쪽에 올려놓는다.
+	flag |= GO(idx + 1, abs(diff - chu[idx]));
+	return ref = flag;
 }
 int main()
 {
 	ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
+	cin >> n;
+	for (int i = 0; i < n; ++i)cin >> chu[i];
+	cin >> k;
+	memset(memo, -1, sizeof(memo));
+	for (int i = 0; i < k; ++i)
 	{
-		cin >> n;
-		for (int i = 0; i < n; ++i)
+		int c; cin >> c;
+		if (1 == GO(0, c))
 		{
-			int a; cin >> a;
-			chu.emplace_back(a);
+			cout << 'Y' << ' ';
 		}
-		cin >> k;
-		for (int i = 0; i < k; ++i)
+		else
 		{
-			int a; cin >> a;
-			orb.emplace_back(a);
+			cout << 'N' << ' ';
 		}
-		memset(memo, -1, sizeof(memo));
-		GO(0, 0, 0);
-		for (int j = 0; j < k; ++j)
-		{
-			if (visited[orb[j]])
-			{
-				cout << 'Y' << ' ';
-			}
-			else
-			{
-				cout << 'N' << ' ';
-			}
-		}
-		cout << '\n';
-		chu.clear();
-		orb.clear();
 	}
 }

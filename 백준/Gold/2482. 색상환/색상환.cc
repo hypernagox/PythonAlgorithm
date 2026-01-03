@@ -6,42 +6,30 @@ using ull = unsigned long long;
 using pi = pair<int, int>;
 using pll = pair<ll, ll>;
 using pull = pair<ull, ull>;
+constexpr const int MOD = 1000000003;
 int n, k;
-ll memo[1001][1001][2];
-ll lim;
-int GO(const int i,const ll num,const bool prev)
+int memo[1001][1001][2];
+int GO(const int i,const int sum,const bool selected)
 {
-   // if (num == k)return 1;
-    if (i == lim)
-    {
-        return (num == k) ? 1 : 0;
-    }
-    auto& ref = memo[i][num][prev];
+    if (i == n)return (sum == k) ? 1 : 0;
+    auto& ref = memo[i][sum][selected];
     if (-1 != ref)return ref;
-    ll v = 0;
-    // 이전에안했으면
-    if (!prev)
+    int res = 0;
+    // 이전에 선택하지않았으면 선택해볼수있다.
+    if (!selected)
     {
-        // 칠할수있음
-        v = GO(i + 1, num + 1, true);
-        v %= 1000000003;
+        res += GO(i + 1, sum + 1, true);
+        res %= MOD;
     }
-    // 칠하지않는다
-    v += GO(i + 1, num, false);
-    v %= 1000000003;
-    return ref = v % 1000000003;
+    res += GO(i + 1, sum, false);//선택하지않고 넘어간다.
+    res %= MOD;
+    return ref = res;
 }
 int main()
 {
     ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
     cin >> n >> k;
     memset(memo, -1, sizeof(memo));
-    // 1번선택
-    lim = n - 1;
-    const auto a = GO(2, 1, 0);
-    lim = n;
-    memset(memo, -1, sizeof(memo));
-    // 1번 미선택
-    const auto b = GO(1, 0, 0);
-    cout << (a + b) % 1000000003;
+    // 0번을 고르지않고 쭉 + 0번고르고, 1번재끼고 마지막꺼 못고르니 n-3개에서의 경우의수
+    cout << (GO(0, 0, true) + GO(3, 1, false)) % MOD;
 }

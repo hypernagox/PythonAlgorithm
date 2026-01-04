@@ -6,71 +6,48 @@ using ull = unsigned long long;
 using pi = pair<int, int>;
 using pll = pair<ll, ll>;
 using pull = pair<ull, ull>;
-
-static const int MAXN = 100;
-
-int n, m;
-vector<pair<int, int>> outEdges[MAXN + 1];
-int indeg[MAXN + 1];
-
-ll need[MAXN + 1][MAXN + 1];
-bool isBasic[MAXN + 1];
-
+int inDegree[101];
+vector<pi> adj[101];
+int res[101][101];
 int main()
 {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-
-    cin >> n >> m;
-
-    for (int i = 0; i < m; ++i)
-    {
-        int a, b, c;
-        cin >> a >> b >> c;
-        outEdges[b].push_back({ a, c });
-        indeg[a] += 1;
-    }
-
+    ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
+    int n, m; cin >> n >> m;
+    vector<int> ans;
     queue<int> q;
-
-    for (int i = 1; i <= n; ++i)
+    while (m--)
     {
-        if (indeg[i] == 0)
+        int a, b, c; cin >> a >> b >> c;
+        adj[b].emplace_back(c, a);
+        ++inDegree[a];
+    }
+    for (int i = 0; i < n; ++i)
+    {
+        if (0 == inDegree[i + 1])
         {
-            isBasic[i] = true;
-            q.push(i);
-            need[i][i] = 1;
+            q.emplace(i + 1);
+            ans.emplace_back(i + 1);
+            res[i + 1][i + 1] = 1;
         }
     }
-
     while (!q.empty())
     {
-        int cur = q.front();
+        const auto cur = q.front();
         q.pop();
-
-        for (const auto& [next, k] : outEdges[cur])
+        for (const auto [cost, next] : adj[cur])
         {
             for (int b = 1; b <= n; ++b)
             {
-                if (need[cur][b] != 0)
+                if (res[cur][b] != 0)
                 {
-                    need[next][b] += need[cur][b] * (ll)k;
+                    res[next][b] += res[cur][b] * (ll)cost;
                 }
             }
-
-            indeg[next] -= 1;
-            if (indeg[next] == 0)
+            if (0 == --inDegree[next])
             {
-                q.push(next);
+                q.emplace(next);
             }
         }
     }
-
-    for (int i = 1; i <= n; ++i)
-    {
-        if (isBasic[i])
-        {
-            cout << i << ' ' << need[n][i] << '\n';
-        }
-    }
+    for (const auto i : ans)cout << i << ' ' << res[n][i] << '\n';
 }

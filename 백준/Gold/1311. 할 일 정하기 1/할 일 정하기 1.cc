@@ -6,20 +6,20 @@ using ull = unsigned long long;
 using pi = pair<int, int>;
 using pll = pair<ll, ll>;
 using pull = pair<ull, ull>;
-int D[21][21];
+int D[20][20];
 int n;
-int memo[21][(1 << 21)];
-int GO(const int human, const int job)
+int memo[1 << 20];
+int GO(const int mask)noexcept
 {
-    if (human == n)return 0;
-    auto& ref = memo[human][job];
-    if (-1 != ref)return ref;
+    if (mask == (1 << n) - 1) return 0;
+    int& ref = memo[mask];
+    if (ref != -1) return ref;
+    const int human = __builtin_popcount((unsigned)mask);
     int res = INF;
-    for (int i = 0; i < n; ++i)
+    for (int j = 0; j < n; ++j)
     {
-        // 이 사람이 i번 째 일을 해본다
-        if (job & (1 << i))continue;
-        res = min(res, GO(human + 1, job | (1 << i)) + D[human][i]);
+        if (mask & (1 << j)) continue;
+        res = min(res, GO(mask | (1 << j)) + D[human][j]);
     }
     return ref = res;
 }
@@ -35,5 +35,5 @@ int main()
         }
     }
     memset(memo, -1, sizeof(memo));
-    cout << GO(0, 0);
+    cout << GO(0);
 }

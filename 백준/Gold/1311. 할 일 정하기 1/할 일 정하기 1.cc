@@ -6,7 +6,7 @@ using ull = unsigned long long;
 using pi = pair<int, int>;
 using pll = pair<ll, ll>;
 using pull = pair<ull, ull>;
-int D[20][20];
+short D[20][20];
 int n;
 int memo[1 << 20];
 int GO(const int mask)noexcept

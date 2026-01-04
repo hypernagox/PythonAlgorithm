@@ -16,7 +16,7 @@ int GO(const int cur, const bool selected)
     auto& ref = memo[cur][selected];
     if (-1 != ref)return ref;
     visited[cur] = true;
-    int res = 0;
+    int res = humans[cur];
     // 만약 cur 가 선택됐다면
     if (selected)
     {
@@ -29,7 +29,7 @@ int GO(const int cur, const bool selected)
     }
     else
     {
-        int r2 = 0;
+        res = 0;
         for (const auto next : adj[cur])
         {
             if (visited[next])continue;
@@ -38,7 +38,7 @@ int GO(const int cur, const bool selected)
         }
     }
     visited[cur] = false;
-    return ref = res + (selected * humans[cur]);
+    return ref = res;
 }
 int main()
 {

@@ -6,51 +6,49 @@ using ull = unsigned long long;
 using pi = pair<int, int>;
 using pll = pair<ll, ll>;
 using pull = pair<ull, ull>;
-vector<int> adj[1000001];
-//bool visited[1000001];
-int memo[1000001][2];
 int n;
-int GO(const int cur,const bool early,const int prev)
+vector<int> tree[1000001];
+bool visited[1000001];
+int memo[1000001][2];
+int GO(const int cur_node, const bool selected)
 {
-    auto& ref = memo[cur][early];
-    if (-1 != ref)return ref;
+    auto& ref = memo[cur_node][selected];
+    if (~ref)return ref;
+    visited[cur_node] = true;
     int res = 0;
-   // visited[cur] = true;
-    if (!early)
+    // 이 노드가 선택 안되었다면
+    if (!selected)
     {
-        // 내가 얼리어답터가 아니라면 자식이 싹다 얼리어답터
-        for (const auto next : adj[cur])
+        // 자식 노드들은 전부 얼리어답터여야함
+        for (const auto next : tree[cur_node])
         {
-            //if (visited[next])continue;
-            if (prev == next)continue;
-            res += GO(next, true,cur);
+            if (visited[next])continue;
+            res += GO(next, true);
         }
     }
     else
     {
-        // 내가 얼리어답터면 자식이 얼리어답터일수도 아닐수도
-        for (const auto next : adj[cur])
+        // 이 노드가 선택 되었다면 일수도 아닐수도
+        for (const auto next : tree[cur_node])
         {
-           // if (visited[next])continue;
-            if (prev == next)continue;
-            const auto m = min(GO(next, false,cur), GO(next, true,cur));
-            res += m;
+            if (visited[next])continue;
+            // 자식 노드는 선택 할 수도 있고 안 할 수도 있음
+            res += min(GO(next, true), GO(next, false));
         }
     }
-    //visited[cur] = false;
-    return ref = res + early;
+    visited[cur_node] = false;
+    return ref = res + selected;
 }
 int main()
 {
     ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
     cin >> n;
-    n -= 1;
-    while (n--)
+    for (int i = 0; i < n - 1; ++i)
     {
         int a, b; cin >> a >> b;
-        adj[a].emplace_back(b);
-        adj[b].emplace_back(a);
+        tree[a].emplace_back(b);
+        tree[b].emplace_back(a);
     }
     memset(memo, -1, sizeof(memo));
-    cout << min(GO(1, 0,1), GO(1, 1,1));
+    cout << min(GO(1, 0), GO(1, 1));
 }

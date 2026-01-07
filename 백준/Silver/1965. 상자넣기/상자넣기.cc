@@ -11,18 +11,18 @@ int arr[1001];
 int memo[1001][1001];
 int GO(const int i, const int prev_idx)
 {
-    if (i == n)return 0;
+    if (i == -1)return 0;
     auto& ref = memo[i][prev_idx + 1];
     if (~ref)return ref;
     int a = 0;
     int b = 0;
-    if (-1 == prev_idx || arr[prev_idx] < arr[i])
+    if (-1 == prev_idx || arr[prev_idx] > arr[i])
     {
         // 선택한다.
-        a = GO(i + 1, i) + 1;
+        a = GO(i - 1, i) + 1;
     }
     // 선택하지 않는다.
-    b = GO(i + 1, prev_idx);
+    b = GO(i - 1, prev_idx);
     return ref = max(a, b);
 }
 int main()
@@ -31,5 +31,5 @@ int main()
     cin >> n;
     for (int i = 0; i < n; ++i)cin >> arr[i];
     memset(memo, -1, sizeof(memo));
-    cout << GO(0, -1);
+    cout << GO(n - 1, -1);
 }

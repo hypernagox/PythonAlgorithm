@@ -22,18 +22,18 @@ int GO(const int i,const int state)
     if (state == 1)
     {
         // 오른쪽 배치
-        res += GO(i + 1, 0)% 9901 + GO(i + 1, 2) % 9901 + 0;
+        res += GO(i + 1, 0)% 9901 + GO(i + 1, 2) % 9901;
     }
     // 오른쪽이었다면
     else if (state == 2)
     {
         // 왼쪽배치
-        res += GO(i + 1, 0) % 9901 + GO(i + 1, 1)% 9901 + 0;
+        res += GO(i + 1, 0) % 9901 + GO(i + 1, 1)% 9901;
     }
     else
     {
         // 없었다면 다가능
-        res += GO(i + 1, 0)% 9901 + GO(i + 1, 2)% 9901 + GO(i + 1, 1)% 9901 + 0;
+        res += GO(i + 1, 0)% 9901 + GO(i + 1, 2)% 9901 + GO(i + 1, 1)% 9901;
     }
     return ref = res % 9901;
 }

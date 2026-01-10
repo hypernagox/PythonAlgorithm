@@ -8,21 +8,21 @@ using pll = pair<ll, ll>;
 using pull = pair<ull, ull>;
 int n;
 int arr[1001];
-int memo[1001][1001];
-int GO(const int idx,const int prev_idx)
+int memo[1001];
+int GO(const int idx)
 {
     if (idx == n)return 0;
-    auto& ref = memo[idx][prev_idx + 1];
+    auto& ref = memo[idx];
     if (~ref)return ref;
-    int a = 0;
-    int b = 0;
-    // 지금 인덱스 쓰자.
-    if(prev_idx==-1 || arr[prev_idx] > arr[idx])
-        a = GO(idx + 1, idx) + 1;
-
-    // 지금 인덱스 안쓴다.
-    b = GO(idx + 1, prev_idx);
-    return ref = max(a, b);
+    int res = 1;
+    for (int i = idx + 1; i < n; ++i)
+    {
+        if (arr[idx] > arr[i])
+        {
+            res = max(res, GO(i) + 1);
+        }
+    }
+    return ref = res;
 }
 int main()
 {
@@ -30,5 +30,10 @@ int main()
     cin >> n;
     for (int i = 0; i < n; ++i)cin >> arr[i];
     memset(memo, -1, sizeof(memo));
-    cout << GO(0, -1);
+    int res = 0;
+    for (int i = 0; i < n; ++i)
+    {
+        res = max(res, GO(i));
+    }
+    cout << res;
 }

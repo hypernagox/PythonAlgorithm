@@ -39,11 +39,12 @@ int main()
 			res = max(res, m_cost);
 			break;
 		}
+		visited[cur] = 1;
 		for (const auto [c, next] : adj[cur])
 		{
 			if (visited[next])continue;
 			if (nokori < c)continue;
-			visited[next] = 1;
+			//visited[next] = 1;
 			q.emplace(nokori - c, next, max(m_cost, c));
 		}
 	}

@@ -12,6 +12,9 @@ struct Data
 	int nokori;
 	int cur;
 	int max_cost;
+	const auto operator < (const Data& d)const {
+		return max_cost > d.max_cost;
+	}
 };
 int main()
 {
@@ -23,18 +26,18 @@ int main()
 		adj[x].emplace_back(z, y);
 		adj[y].emplace_back(z, x);
 	}
-	queue<Data> q;
+	priority_queue<Data> q;
 	q.emplace(c, a, 0);
 	visited[a] = 1;
 	int res = -1;
 	while (!q.empty())
 	{
-		const auto [nokori, cur, m_cost] = q.front();
+		const auto [nokori, cur, m_cost] = q.top();
 		q.pop();
 		if (cur == b)
 		{
 			res = max(res, m_cost);
-			continue;
+			break;
 		}
 		for (const auto [c, next] : adj[cur])
 		{

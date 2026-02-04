@@ -7,26 +7,23 @@ using pll = pair<ll, ll>;
 int n, m;
 constexpr const int dy[]{ 1,0 };
 constexpr const int dx[]{ 0,1 };
-bool visited[301][301];
-ll candy[301][301];
-ll memo[301][301];
-ll GO(const int y, const int x, const int times)
+set<pi> s;
+int memo[301][301];
+int GO(const int y, const int x)
 {
-    visited[y][x] = 1;
+    const auto times = y + x;
     if (times == m)return 0;
     auto& ref = memo[y][x];
     if (~ref)return ref;
-    ll res = 0;
+    int res = 0;
     for (int i = 0; i < 2; ++i)
     {
         const auto ny = y + dy[i];
         const auto nx = x + dx[i];
         if (ny < 0 || nx < 0 || ny >= 300 || nx >= 300)continue;
-        if (visited[ny][nx])continue;
-        res = max(res,GO(ny, nx, times + 1));
+        res = max(res,GO(ny, nx));
     }
-    visited[y][x] = 0;
-    return ref = res + max(0LL, ll(candy[y][x] - times));
+    return ref = res + max(0,(((int)s.count({y,x}) * m) - times));
 }
 int main()
 {
@@ -35,8 +32,8 @@ int main()
     for (int i = 0; i < n; ++i)
     {
         int a, b; cin >> a >> b;
-        candy[b][a] = m;
+        s.emplace(b, a);
     }
     memset(memo, -1, sizeof(memo));
-    cout << GO(0, 0, 0);
+    cout << GO(0, 0);
 }

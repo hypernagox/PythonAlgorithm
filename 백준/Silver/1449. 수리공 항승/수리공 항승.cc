@@ -12,22 +12,15 @@ int main()
     cin >> n >> l;
     for (int i = 0; i < n; ++i)cin >> arr[i];
     sort(arr, arr + n);
-    int cur_start = arr[0];
-    int cur_tape = l - 1;
-    int ans = 1;
-    for (int i = 1; i < n; ++i)
+    int ans = 0;
+    int cover_end = -1;
+    for (int i = 0; i < n; ++i)
     {
-        const auto len = arr[i] - cur_start;
-        if (cur_tape >= len)
+        if (arr[i] > cover_end) 
         {
-            cur_tape -= len;
-        }
-        else
-        {
-            cur_tape = l - 1;
             ++ans;
+            cover_end = arr[i] + l - 1;
         }
-        cur_start = arr[i];
     }
     cout << ans;
 }

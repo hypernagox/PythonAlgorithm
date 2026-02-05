@@ -1,17 +1,13 @@
 #include <bits/stdc++.h>
 using namespace std;
 vector<vector<int>> c;
-int visited[9][9];
+int n;
 bool IsFinish()
 {
-    for(const auto& v:c)
-    {
-        for(const auto i: v)
-        {
-            if(i)return false;
-        }
-    }
-    return true;
+    // all_of
+    return all_of(c.begin(),c.end(),[](const auto& row){
+        return count(row.begin(),row.end(), 0) == row.size();
+    });
 }
 void Rotate(const int y,const int x, const int dir)
 {
@@ -25,8 +21,6 @@ void Rotate(const int y,const int x, const int dir)
         c[ny][nx] = (c[ny][nx] + 4 + dir) % 4;
     }
 }
-int ans = 987654321;
-int n;
 int GO(const int row, const int col)
 {
     if(row == n)

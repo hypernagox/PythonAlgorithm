@@ -1,7 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
-unordered_map<long long, long long> m;
-long long GetNum(const long long cur_num)
+long long GetNum(const long long cur_num, unordered_map<long long, long long>& m)
 {
     const auto iter = m.find(cur_num);
     if(m.end() == iter)
@@ -11,16 +10,18 @@ long long GetNum(const long long cur_num)
     }
     else
     {
-        return iter->second = GetNum(iter->second);
+        return iter->second = GetNum(iter->second, m);
     }
 }
 vector<long long> solution(long long k, vector<long long> room_number) 
 {
     vector<long long> answer;
+    unordered_map<long long, long long> m;
+    answer.reserve(room_number.size());
     m.reserve(room_number.size());
     for(const auto i : room_number)
     {
-        answer.emplace_back(GetNum(i) - 1);
+        answer.emplace_back(GetNum(i, m) - 1);
     }
     return answer;
 }

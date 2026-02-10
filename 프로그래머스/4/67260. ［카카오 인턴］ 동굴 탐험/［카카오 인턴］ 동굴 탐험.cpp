@@ -16,16 +16,14 @@ void GO(const int cur)
         }
     }
     visited[cur]=true;
-    for(int i=0;i<adj[cur].size();++i)
+    for(const auto next : adj[cur])
     {
-        const auto next = adj[cur][i];
         if(visited[next])continue;
         GO(next);
     }
 }
 bool solution(int n, vector<vector<int>> path, vector<vector<int>> order) 
 {
-    bool answer = true;
     for(const auto& e: path)
     {
         adj[e[0]].emplace_back(e[1]);
@@ -37,6 +35,6 @@ bool solution(int n, vector<vector<int>> path, vector<vector<int>> order)
         before.emplace(v[1],v[0]);
     }
     GO(0);
-    for(int i=0;i<n;++i)if(!visited[i])answer=false;
-    return answer;
+    for(int i=0;i<n;++i)if(!visited[i])return false;
+    return true;
 }

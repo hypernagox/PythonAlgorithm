@@ -37,7 +37,7 @@ void Dij(const int num)
             int c = 2;
             if(ny != y && nx != x)++c;
             if(ny < 0 || nx < 0 || ny >= 4 || nx >= 3)continue;
-            if(ny == 3 && (nx == 0 || nx == 2)) continue;
+           // if(ny == 3 && (nx == 0 || nx == 2)) continue;
             const auto new_cost = cost + c;
             if(dists[sy][sx][ny][nx] > new_cost)
             {

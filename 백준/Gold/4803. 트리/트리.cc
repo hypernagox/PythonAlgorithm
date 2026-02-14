@@ -6,31 +6,21 @@ using ull = unsigned long long;
 using pi = pair<int, int>;
 using pll = pair<ll, ll>;
 using pull = pair<ull, ull>;
-int state[501]; 
-// 0: 미방문 
-// 1: 방문 중
-// 2: 방문 끝
-bool has_cycle = false;
-void dfs(vector<short> adj[], const short cur_node, const short parent_node)
+bool dfs(int state[], vector<short> adj[], const short cur_node, const short parent_node)
 {
-    if (1 == state[cur_node])
+    if (0 != state[cur_node])
     {
-        // 사이클 발견
-        has_cycle = true;
-        return;
+        return false;
     }
-    if (2 == state[cur_node])
-    {
-        return;
-    }
+    bool ret = true;
     state[cur_node] = 1;
     for (const auto next : adj[cur_node])
     {
         if (next == parent_node)continue;
-        if (2 == state[next])continue;
-        dfs(adj, next, cur_node);
+        ret &= dfs(state, adj, next, cur_node);
     }
     state[cur_node] = 2;
+    return ret;
 }
 int main()
 {
@@ -41,7 +31,7 @@ int main()
         int n, m; cin >> n >> m;
         int ans = 0;
         if (0 == n)break;
-        memset(state, 0, sizeof(state));
+        int state[501]{};
         vector<short> adj[501];
         while (m--)
         {
@@ -51,10 +41,8 @@ int main()
         }
         for (int i = 1; i <= n; ++i)
         {
-            if (0 != state[i])continue;
-            has_cycle = false;
-            dfs(adj, i, -1);
-            ans += !has_cycle;
+            if (state[i])continue;
+            ans += dfs(state, adj, i, -1);
         }
         cout << "Case " << ++cnt << ": ";
         if (0 == ans)

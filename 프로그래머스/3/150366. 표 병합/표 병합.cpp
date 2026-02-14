@@ -25,15 +25,15 @@ void Update(const pi pos, const string& word)
 }
 void Merge(const pi pos1, const pi pos2)
 {
-    pi r1 = FindParent(pos1);
-    pi r2 = FindParent(pos2);
+    const pi r1 = FindParent(pos1);
+    const pi r2 = FindParent(pos2);
     if (r1 == r2) return;
-    string v1 = board[r1];
-    string v2 = board[r2];
+    const string v1 = board[r1];
+    const string v2 = board[r2];
     Union(r1, r2);
-    pi root = FindParent(r1);
-    pi other = (root == r1 ? r2 : r1);
-    string keep = v1.empty() ? v2 : v1;
+    const pi root = FindParent(r1);
+    const pi other = (root == r1 ? r2 : r1);
+    const string keep = v1.empty() ? v2 : v1;
     board[root] = keep;
 }
 void UnMerge(const pi target)
@@ -96,26 +96,19 @@ vector<string> solution(vector<string> commands)
         ss >> cmd;
         if (cmd == "UPDATE")
         {
-            string part;
-    vector<string> parts;
-    // 남은 줄을 모두 읽어서 공백 단위로 분리
-    while (ss >> part) {
-        parts.push_back(part);
-    }
-
-    if (parts.size() == 3) 
-    {
-        // 인자가 3개면: UPDATE r c value
-        int r = stoi(parts[0]);
-        int c = stoi(parts[1]);
-        string v = parts[2];
-        Update({r, c}, v);
-    }
-    else if (parts.size() == 2)
-    {
-        // 인자가 2개면: UPDATE val1 val2
-        UpdateAll(parts[0], parts[1]);
-    }
+            string a, b, v;
+            ss >> a >> b >> v;
+            if (!v.empty())
+            {
+                int r = stoi(a);
+                int col = stoi(b);
+                ss >> v;
+                Update({r, col}, v);
+            }
+            else
+            {
+                UpdateAll(a, b);
+            }
         }
         else if (cmd == "MERGE")
         {

@@ -1,27 +1,18 @@
 #include <bits/stdc++.h>
 using namespace std;
-int arr[5000001]; // 몇 번 등장?
+int appear[5000001];
 int memo[5000001];
 int E;
-int GO(const int k)
+int GO(const int idx)
 {
-    auto& ref = memo[k];
+    if(idx == E)
+    {
+        return idx;
+    }
+    auto& ref = memo[idx];
     if(~ref)return ref;
-    if(k == E)
-    {
-        memo[k] = k;
-        return ref = k;
-    }
-    const auto val = GO(k + 1);
-    if(arr[k] < arr[val])
-    {
-        memo[k] = memo[k+1];
-    }
-    else
-    {
-        memo[k] = k;
-    }
-    return ref = memo[k];
+    const auto val = GO(idx + 1); // idx + 1 의 정답
+    return ref = appear[idx] >= appear[val] ? idx : val; // 지금 빈도가 더 크면 지금 값을 리턴
 }
 vector<int> solution(int e, vector<int> starts)
 {
@@ -29,13 +20,13 @@ vector<int> solution(int e, vector<int> starts)
     E = e;
     for(int i=1;i<=e;++i)
     {
-        for(int j = i; j <= e; j += i)
+        for(int j=i;j<=e; j+=i)
         {
-            ++arr[j];
+            ++appear[j];
         }
     }
     memset(memo,-1,sizeof(memo));
-    for(const auto i : starts)
+    for(const auto i :starts)
     {
         answer.emplace_back(GO(i));
     }

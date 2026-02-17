@@ -12,34 +12,26 @@ void Solve()noexcept
     while (t--)
     {
         int n; cin >> n;
-        vector<string> strs[11];
-        while (n--)
+        vector<string> v;
+        v.reserve(n);
+        for (int i = 0; i < n; ++i)
         {
-            string temp; cin >> temp;
-            strs[temp.size()].emplace_back(move(temp));
+            string s; cin >> s;
+            v.emplace_back(move(s));
         }
-        bool flag = true;
-        for (int i = 1; i <= 9; ++i)
+        sort(v.begin(), v.end());
+        bool ok = true;
+        for (int i = 0; i < (int)v.size() - 1; ++i)
         {
-            for (const auto& s1 : strs[i])
+            const string& a = v[i];
+            const string& b = v[i + 1];
+            if (b.starts_with(a))
             {
-                for (int j = i + 1; j <= 10; ++j)
-                {
-                    for (const auto& s2 : strs[j])
-                    {
-                        const string_view sv{ s2.data(),s1.size() };
-                        if (s1 == sv)
-                        {
-                            flag = false;
-                            goto END;
-                        }
-                    }
-                }
+                ok = false;
+                break;
             }
         }
-    END:
-        if (flag)cout << "YES\n";
-        else cout << "NO\n";
+        cout << (ok ? "YES\n" : "NO\n");
     }
 }
 void FastIO()noexcept;

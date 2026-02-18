@@ -2,50 +2,40 @@
 using namespace std;
 struct Data
 {
-    int a;
-    int b;
+    int score_a;
+    int score_b;
     const auto operator<(const Data& d)const{
-        const auto s1 = (a+b);
-        const auto s2 = (d.a + d.b);
-        return s1 < s2;
+        if(score_a == d.score_a)return score_b < d.score_b;
+        return score_a > d.score_a;
     }
+    Data(int a,int b):score_a{a},score_b{b}{}
 };
-int solution(vector<vector<int>> scores) 
+int solution(vector<vector<int>> scores)
 {
-    const auto ta = scores[0][0];
-    const auto tb = scores[0][1];
-    vector<pair<int,int>> datas;
-    for(const auto& v:scores)
+    const auto target = scores[0][0] + scores[0][1];
+    // 한쪽은 내림차순, 한쪽은 오름차순
+    // -> 점수하나 내림차순 시 동률일때 한쪽점수가 낮아도 일단 살가능성이있음
+    vector<Data> v;
+    for(const auto& e:scores)
     {
-        datas.emplace_back(v[0],v[1]);
+        v.emplace_back(e[0],e[1]);
     }
-    sort(datas.begin(), datas.end(),
-        [](const pair<int,int>& x, const pair<int,int>& y)
-        {
-            if (x.first != y.first) return x.first > y.first;
-            return x.second < y.second;
-        });
-    int max_b = -1;
-    vector<Data> d;
-    for(const auto [a,b]:datas)
+    sort(v.begin(),v.end());
+    int max_b=-1;
+    vector<int> vv;
+    for(const auto [a,b]:v)
     {
         if(max_b <= b)
         {
             max_b = b;
-            Data D;
-            D.a=a;
-            D.b=b;
-            d.emplace_back(D);
+            vv.emplace_back(a+b);
+            
         }
         else
         {
-            // 모든 점수가 낮음
-            if(a==ta && b==tb)return -1;
+            if(scores[0][0] == a && scores[0][1] == b)return -1;
         }
     }
-    sort(d.begin(),d.end());
-    Data target;
-    target.a=ta;
-    target.b=tb;
-    return (d.end() - upper_bound(d.begin(),d.end(),target)) + 1;
+    sort(vv.begin(),vv.end());
+    return (vv.end() - upper_bound(vv.begin(),vv.end(),target)) + 1;
 }

@@ -11,7 +11,6 @@ constexpr const int dy[]{ -1,0,1,0 };
 constexpr const int dx[]{ 0,1,0,-1 };
 constexpr const int DIRS = sizeof(dy) / sizeof(dy[0]);
 char board[21][21];
-bool visited[26];
 int r, c;
 unordered_map<ll, int> memo;
 ll MakeKey(const int y, const int x, const int state)
@@ -23,8 +22,6 @@ int GO(const int y, const int x, const int state)
     const auto key = MakeKey(y, x, state);
     const auto iter = memo.find(key);
     if (memo.end() != iter)return iter->second;
-    const auto alpha = board[y][x] - 'A';
-    visited[alpha] = 1;
     int res = 1;
     for (int i = 0; i < DIRS; ++i)
     {
@@ -35,13 +32,12 @@ int GO(const int y, const int x, const int state)
             continue;
         }
         const auto next_alpha= board[ny][nx] - 'A';
-        if (visited[next_alpha])
+        if (state & (1 << next_alpha))
         {
             continue;
         }
         res = max(res, GO(ny, nx, state | (1 << next_alpha)) + 1);
     }
-    visited[alpha] = 0;
     memo.emplace(key, res);
     return res;
 }
@@ -55,7 +51,8 @@ void Solve()noexcept
             cin >> board[i][j];
         }
     }
-    cout << GO(0, 0, 0);
+    memo.reserve(r * c * 26);
+    cout << GO(0, 0, 1 << (board[0][0] - 'A'));
 }
 int main()
 {

@@ -13,14 +13,7 @@ constexpr const int dx[]{ 0,1,0,-1 };
 int n, m;
 char board[501][501];
 int state[501][501]; // 0 미방문, 1 방문중, 2 방문 끝
-int memo[501][501];
-map<char, int> dirs
-{
-    {'U',0},
-    {'R',1},
-    {'D',2},
-    {'L',3},
-};
+int dirs[26];
 bool CanGo(const int y, const int x)
 {
     if (y < 0 || x < 0 || y >= n || x >= m)return false;
@@ -30,21 +23,20 @@ int GO(const int y, const int x)
 {
     if (!CanGo(y, x))
     {
-        return 1;
+        return 2; // 2는 가능
     }
     if (1 == state[y][x])
     {
-        return 0;
+        return 1; // 1은 불가
     }
-    auto& ref = memo[y][x];
-    if (~ref)return ref;
-    state[y][x] = 1;
+    auto& ref = state[y][x];
+    if (ref)return ref; // 0은 아직모르지만 1이나 2 값이 들어있으면 아는것임
+    ref = 1;
     const auto val = board[y][x];
     const auto dir = dirs[val];
     const auto ny = y + dy[dir];
     const auto nx = x + dx[dir];
     const auto res = GO(ny, nx);
-    state[y][x] = 2;
     return ref = res;
 }
 void Solve()noexcept
@@ -55,15 +47,19 @@ void Solve()noexcept
         for (int j = 0; j < m; ++j)
         {
             cin >> board[i][j];
+            board[i][j] -= 'A';
         }
     }
-    memset(memo, -1, sizeof(memo));
+    dirs['U' - 'A'] = 0;
+    dirs['R' - 'A'] = 1;
+    dirs['D' - 'A'] = 2;
+    dirs['L' - 'A'] = 3;
     int ans = 0;
     for (int i = 0; i < n; ++i)
     {
         for (int j = 0; j < m; ++j)
         {
-            ans += GO(i, j);
+            ans += GO(i, j) - 1;
         }
     }
     cout << ans;

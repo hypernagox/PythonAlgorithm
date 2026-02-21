@@ -38,6 +38,7 @@ void Solve()noexcept
         for (const auto [c, next] : adj[cur])
         {
             const auto new_cost = min(c, cost);
+            if (visited[next])continue;
             if (dists[next] > new_cost)continue;
             dists[next] = new_cost;
             pq.emplace(new_cost, next);

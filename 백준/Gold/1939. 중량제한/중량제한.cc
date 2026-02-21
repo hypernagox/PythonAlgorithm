@@ -12,15 +12,6 @@ ll dists[10001];
 vector<pll> adj[10001];
 bool visited[10001];
 int n, m;
-struct Data
-{
-    int cur;
-    ll cost;
-    ll ans;
-    const auto operator <(const Data& d)const {
-        return cost < d.cost;
-    }
-};
 void Solve()noexcept
 {
     cin >> n >> m;
@@ -31,30 +22,27 @@ void Solve()noexcept
         adj[b].emplace_back(c, a);
     }
     int start, end; cin >> start >> end;
-    priority_queue<Data> pq;
-    pq.emplace(start,0LL,INT64_MAX);
-    //visited[start] = 1;
-    set<ll>s;
+    priority_queue<pll> pq;
+    pq.emplace(INT64_MAX, start);
     while (pq.size())
     {
-        const auto [cur,cost,ans] = pq.top();
+        const auto [cost, cur] = pq.top();
         pq.pop();
         if (visited[cur])continue;
         visited[cur] = 1;
         if (cur == end)
         {
-            cout << ans;
+            cout << cost;
             break;
         }
         for (const auto [c, next] : adj[cur])
         {
-            const auto new_cost = c;
+            const auto new_cost = min(c, cost);
             if (dists[next] > new_cost)continue;
             dists[next] = new_cost;
-            pq.emplace(next, new_cost, min(ans, c));
+            pq.emplace(new_cost, next);
         }
     }
-   // cout << *s.rbegin();
 }
 int main()
 {

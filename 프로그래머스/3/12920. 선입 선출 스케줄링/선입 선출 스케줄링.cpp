@@ -1,53 +1,48 @@
 #include <bits/stdc++.h>
-
-static long long DoneByTime(long long t, const std::vector<int>& cores)
+using namespace std;
+using ll = long long;
+// mid 시간일 때 처리 가능한 작업 수
+ll Cal(const ll mid, const vector<int>& cores)
 {
-    long long res = (long long)cores.size();
-    for (int c : cores)
+    ll s = cores.size();
+    for(const auto i : cores)
     {
-        res += (t / (long long)c);
+        s += (mid / (ll)i);
     }
-    return res;
+    return s;
 }
-
-int solution(int n, std::vector<int> cores)
+int solution(int n, vector<int> cores) 
 {
-    const int m = (int)cores.size();
-    if (n <= m)
+    if(n <= cores.size())return n;
+    ll l = 0;
+    ll e = 1LL << 20;
+    ll t = 0;
+    while(l < e)
     {
-        return n; 
-    }
-    long long lo = 0;
-    long long hi = 1;
-    while (DoneByTime(hi, cores) < n)
-    {
-        hi <<= 1;
-    }
-    while (lo < hi)
-    {
-        long long mid = (lo + hi) / 2;
-        if (DoneByTime(mid, cores) >= n)
+        const auto mid = (l + e) / 2LL;
+        const auto cnt = Cal(mid,cores);
+        if(cnt >= n)
         {
-            hi = mid;
+            t = mid;
+            e = mid;
         }
         else
         {
-            lo = mid + 1;
+            l = mid + 1;
         }
     }
-    const long long t = lo;
-    const long long done_before = DoneByTime(t - 1, cores);
-    long long cur = done_before;
-    for (int i = 0; i < m; ++i)
+    ll ans = 0;
+    ll prev_cnt = Cal(t - 1,cores); // 1초 덜 줬으면 몇 개 까지 작업이 가능한가?
+    for(int i=0;i<cores.size();++i)
     {
-        if ((t % (long long)cores[i]) == 0)
+        if(t % cores[i] == 0) // 작업을 완료하기 위한 최소시간 t에서 마지막 작업은 배수관계여야함
         {
-            ++cur;
-            if (cur == n)
+            if(++prev_cnt == n) // t-1초에서 못다한 작업을 한개씩처리해서 n개에 도달하면
             {
-                return i + 1;
+               ans = i + 1;
+               break;
             }
         }
     }
-    return -1;
+    return ans;
 }

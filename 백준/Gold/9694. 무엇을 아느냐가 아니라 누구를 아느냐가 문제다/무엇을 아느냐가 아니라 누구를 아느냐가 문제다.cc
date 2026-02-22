@@ -12,12 +12,11 @@ void Solve()noexcept
 {
     int t; cin >> t;
     int cnt = 1;
-    unordered_map<int, int> parents;
+    map<int, int> parents;
     vector<int> ans;
     vector<pi> adj[21];
     priority_queue<pi, vector<pi>, greater<pi>> pq;
     ans.reserve(50);
-    parents.reserve(50);
     while (t--)
     {
         int dists[21];

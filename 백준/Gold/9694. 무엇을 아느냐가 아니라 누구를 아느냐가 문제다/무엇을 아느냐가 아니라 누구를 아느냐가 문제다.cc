@@ -1,22 +1,25 @@
 #include <bits/stdc++.h>
 using namespace std;
 void FastIO()noexcept { ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL); }
-constexpr const int INF = static_cast<int>(1e9);
+constexpr const int INF = static_cast<const int>(1e9);
 constexpr const int MIN_INF = -INF;
 using ll = long long;
 using ull = unsigned long long;
 using pi = pair<int, int>;
 using pll = pair<ll, ll>;
 using pull = pair<ull, ull>;
-map<int, int> parents;
-vector<int> ans;
 void Solve()noexcept
 {
     int t; cin >> t;
     int cnt = 1;
+    unordered_map<int, int> parents;
+    vector<int> ans;
+    vector<pi> adj[21];
+    priority_queue<pi, vector<pi>, greater<pi>> pq;
+    ans.reserve(50);
+    parents.reserve(50);
     while (t--)
     {
-        vector<pi> adj[21];
         int dists[21];
         fill(dists, dists + 21, INF);
         int n, m; cin >> n >> m;
@@ -26,7 +29,6 @@ void Solve()noexcept
             adj[a].emplace_back(c, b);
             adj[b].emplace_back(c, a);
         }
-        priority_queue<pi, vector<pi>, greater<pi>> pq;
         pq.emplace(0, 0);
         dists[0] = 0;
         parents[0] = 0;
@@ -61,6 +63,8 @@ void Solve()noexcept
         else for (const auto i : ans)cout << i << ' ';
         cout << '\n';
         ans.clear();
+        for (int i = 0; i < m; ++i)adj[i].clear();
+        while (pq.size())pq.pop();
     }
 }
 int main()

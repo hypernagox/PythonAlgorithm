@@ -1,10 +1,10 @@
 # [level 3] 아방가르드 타일링 - 181186 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/181186) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/181186#) 
 
 ### 성능 요약
 
-메모리: 4.19 MB, 시간: 1.06 ms
+메모리: 8.8 MB, 시간: 6.35 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2026년 02월 23일 09:40:58
+2026년 02월 23일 09:43:10
 
 ### 문제 설명
 

@@ -8,8 +8,8 @@ using ull = unsigned long long;
 using pi = pair<int, int>;
 using pll = pair<ll, ll>;
 using pull = pair<ull, ull>;
-constexpr const int dy[]{ -1,0,1,0 };
-constexpr const int dx[]{ 0,1,0,-1 };
+constexpr const int dy[]{ -1,0,1,0 ,-1000};
+constexpr const int dx[]{ 0,1,0,-1 ,-1000};
 vector<string> board;
 int n, m;
 int visited[51][51];
@@ -67,7 +67,6 @@ void Solve() noexcept
     vector<string> anss;
     while (cin >> n >> m)
     {
-        //cin >> n >> m;
         for (int i = 0; i < n; ++i)
         {
             string temp; cin >> temp;
@@ -75,22 +74,21 @@ void Solve() noexcept
         }
         ans = INF;
         g = GetGoal();
-        memset(visited, 0, sizeof(visited));
         for (int i = 0; i < n; ++i)
         {
             for (int j = 0; j < m; ++j)
             {
                 if (board[i][j] == '*')continue;
-                for (int k = 0; k < 4; ++k)
+               // for (int k = 0; k < 4; ++k)
                 {
                     visited[i][j] = 1;
-                    GO(i, j, k, 1, 1);
+                    GO(i, j, 4, 0, 1);
                     visited[i][j] = 0;
                 }
             }
         }
         if (ans >= INF)ans = -1;
-        if (g == 1)ans = 0;
+       // if (g == 1)ans = 0;
         cout << "Case " << ++cnt << ": " << ans << '\n';
         board.clear();
     }

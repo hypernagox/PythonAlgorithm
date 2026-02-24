@@ -39,18 +39,15 @@ void GO(const int y, const int x, const int dir, const int num, const int d)
     auto ny = y + dy[dir];
     auto nx = x + dx[dir];
     if(num >= ans)return;
-    //visited[y][x] = 1;
     if (d == g)
     {
         ans = min(ans, num);
-        visited[ny][nx] = 0;
         return;
     }
+    visited[y][x] = 1;
     if (CanGo(ny, nx))
     {
-        visited[ny][nx] = 1;
         GO(ny, nx, dir, num, d + 1);
-        visited[ny][nx] = 0;
     }
     else
     {
@@ -59,12 +56,10 @@ void GO(const int y, const int x, const int dir, const int num, const int d)
             ny = y + dy[k];
             nx = x + dx[k];
             if (!CanGo(ny, nx))continue;
-            visited[ny][nx] = 1;
             GO(ny, nx, k, num + 1, d + 1);
-            visited[ny][nx] = 0;
         }
     }
-   // visited[y][x] = 0;
+    visited[y][x] = 0;
 }
 void Solve() noexcept
 {
@@ -88,7 +83,6 @@ void Solve() noexcept
                 if (board[i][j] == '*')continue;
                 for (int k = 0; k < 4; ++k)
                 {
-                    //memset(visited, 0, sizeof(visited));
                     visited[i][j] = 1;
                     GO(i, j, k, 1, 1);
                     visited[i][j] = 0;
@@ -97,14 +91,8 @@ void Solve() noexcept
         }
         if (ans >= INF)ans = -1;
         if (g == 1)ans = 0;
-        stringstream sstream;
-        sstream << "Case " << ++cnt << ": " << ans << '\n';
-        anss.emplace_back(sstream.str());
+        cout << "Case " << ++cnt << ": " << ans << '\n';
         board.clear();
-    }
-    for (const auto s : anss)
-    {
-        cout << s;
     }
 }
 int main()

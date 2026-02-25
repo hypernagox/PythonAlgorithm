@@ -9,16 +9,16 @@ using pi = pair<int, int>;
 using pll = pair<ll, ll>;
 using pull = pair<ull, ull>;
 int n, m, J, S;
-ll dp[101][101];
+int dp[101][101];
 void Solve()noexcept
 {
-    fill(&**dp, &**dp + 101 * 101, INF*2LL);
+    fill(&**dp, &**dp + 101 * 101, INF);
     cin >> n >> m;
     for (int i = 0; i < m; ++i)
     {
         int a, b, c; cin >> a >> b >> c;
-        dp[a][b] = min(dp[a][b], (ll)c);
-        dp[b][a] = min(dp[b][a], (ll)c);
+        dp[a][b] = min(dp[a][b], c);
+        dp[b][a] = min(dp[b][a], c);
     }
     cin >> J >> S;
     for (int i = 1; i <= n; ++i)dp[i][i] = 0;
@@ -33,8 +33,8 @@ void Solve()noexcept
         }
     }
     int ans = -1;
-    ll min_d = INF*2LL;
-    ll jdist = INF*2LL;
+    int min_d = INF;
+    int jdist = INF;
     for (int i = 1; i <= n; ++i)
     {
         if (J == i || S == i)continue;

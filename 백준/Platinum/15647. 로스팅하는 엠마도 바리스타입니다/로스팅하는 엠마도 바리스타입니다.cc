@@ -8,27 +8,27 @@ using ull = unsigned long long;
 using pi = pair<int, int>;
 using pll = pair<ll, ll>;
 using pull = pair<ull, ull>;
-vector<pi> adj[300001];
-int subtrees[300001];
-ll memo[300001];
+int sub_trees[300001];
+vector<pi> trees[300001];
 int n;
-void GetSub(const int cur, const int prev)
+ll dists[300001];
+void CalSub(const int cur, const int prev)
 {
-    for (const auto [c, next] : adj[cur])
+    ++sub_trees[cur];
+    for (const auto [c, next] : trees[cur])
     {
-        if (prev == next)continue;
-        ++subtrees[cur];
-        GetSub(next, cur);
-        subtrees[cur] += subtrees[next];
-        memo[cur] += memo[next] + (subtrees[next] + 1) * c;
+        if (next == prev)continue;
+        CalSub(next, cur);
+        sub_trees[cur] += sub_trees[next];
+        dists[1] += (sub_trees[next] * c);
     }
 }
 void GO(const int cur, const int prev)
 {
-    for (const auto [c, next] : adj[cur])
+    for (const auto [c, next] : trees[cur])
     {
-        if (prev == next)continue;
-        memo[next] = memo[cur] - ((subtrees[next] + 1) * c) + ((n - subtrees[next] - 1) * c);
+        if (next == prev)continue;
+        dists[next] = dists[cur] - (c * sub_trees[next]) + ((n - sub_trees[next]) * c);
         GO(next, cur);
     }
 }
@@ -38,14 +38,14 @@ void Solve()noexcept
     for (int i = 0; i < n - 1; ++i)
     {
         int a, b, c; cin >> a >> b >> c;
-        adj[a].emplace_back(c, b);
-        adj[b].emplace_back(c, a);
+        trees[a].emplace_back(c, b);
+        trees[b].emplace_back(c, a);
     }
-    GetSub(1, 0);
+    CalSub(1, 0);
     GO(1, 0);
     for (int i = 1; i <= n; ++i)
     {
-        cout << memo[i] << '\n';
+        cout << dists[i] << ' ';
     }
 }
 int main()

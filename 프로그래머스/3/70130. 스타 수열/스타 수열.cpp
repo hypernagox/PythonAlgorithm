@@ -1,25 +1,26 @@
-#include <string>
-#include <vector>
+#include <bits/stdc++.h>
 using namespace std;
-int cnt[500001];
+
 int solution(std::vector<int> a)
 {
+    unordered_map<int,int> freq;
+    freq.reserve(a.size());
+    for(const auto i: a)++freq[i];
     int answer = 0;
-    for(const auto i: a)++cnt[i];
-    for(int i=0;i<500001;++i)
+    for(int i = 0; i < a.size();++i)
     {
-        if(cnt[i] == 0)continue;
-        if(cnt[i] <= answer)continue;
-        int res = 0;
-        for(int j=0;j<a.size()-1;++j)
+        const auto iter = freq.find(i);
+        if(freq.end() == iter)continue;
+        if(iter->second <= answer)continue;
+        int temp = 0;
+        for(int j = 0 ; j <a.size() - 1; ++j)
         {
-            if((a[j] == i || a[j + 1] == i) && a[j] != a[j+1])
+            if((a[j]==i || a[j+1] ==i) && a[j] != a[j + 1])
             {
-                ++res;
+                answer = max(answer,++temp);
                 ++j;
             }
         }
-        answer = max(answer,res);
     }
     return answer * 2;
 }

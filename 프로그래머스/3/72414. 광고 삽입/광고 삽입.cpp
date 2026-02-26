@@ -1,56 +1,53 @@
 #include <bits/stdc++.h>
 using namespace std;
-long long ToSec(const string& t)
+long long Time2Int(const string& time)
 {
-    const int h = stoi(t.substr(0, 2));
-    const int m = stoi(t.substr(3, 2));
-    const int s = stoi(t.substr(6, 2));
-    return 1LL * h * 3600 + 1LL * m * 60 + s;
+    const auto h = time.substr(0,2);
+    const auto m = time.substr(3,2);
+    const auto s = time.substr(6,2);
+    return stoll(h) * 3600 + stoll(m) * 60 + stoll(s);
 }
-string ToTime(long long sec)
+string Int2Time(const long long sec)
 {
-    long long h = sec / 3600; sec %= 3600;
-    long long m = sec / 60;   sec %= 60;
-    long long s = sec;
+    const long long h = sec / 3600;
+    const long long m = (sec % 3600) / 60;
+    const long long s = sec % 60;
     ostringstream oss;
     oss << setw(2) << setfill('0') << h << ":"
         << setw(2) << setfill('0') << m << ":"
         << setw(2) << setfill('0') << s;
     return oss.str();
 }
-constexpr const long long ALL_TIME = 100 * 3600 + 1;
-long long diff[ALL_TIME];
-long long viewers[ALL_TIME];
-long long acc_views[ALL_TIME];
 string solution(string play_time, string adv_time, vector<string> logs)
 {
-    const auto p = ToSec(play_time);
-    const auto a = ToSec(adv_time);
-    for(const auto& log : logs)
+    const auto total_play_time = Time2Int(play_time);
+    const auto adv = Time2Int(adv_time);
+    vector<long long> delta_play(total_play_time + 2);
+    vector<long long> viewer(total_play_time + 2);
+    vector<long long> acc_viewer(total_play_time + 2);
+    for(const auto& t: logs)
     {
-        const auto s = ToSec(log.substr(0,8));
-        const auto e = ToSec(log.substr(9,8));
-        ++diff[s];
-        --diff[e];
+        const auto s = Time2Int(t.substr(0,8));
+        const auto e = Time2Int(t.substr(9,8));
+        delta_play[s]++;
+        delta_play[e]--;
     }
-    for(int i = 1;i <= p;++i)
+    viewer[0] = delta_play[0];
+    for(int i=1;i<delta_play.size();++i)
     {
-        viewers[i] = diff[i] + viewers[i-1];
+       acc_viewer[i] = acc_viewer[i-1]+viewer[i-1];
+       viewer[i] = delta_play[i] + viewer[i-1];
     }
-     for(int i = 1;i <= p;++i)
+    long long max_val = -1;
+    long long ans = 0;
+    for(int i=0;i<=total_play_time - adv;++i)
     {
-        acc_views[i] = acc_views[i - 1] + viewers[i - 1];
-    }
-    long long sum = 0;
-    long long start = 0;
-    for(int i = 0; i + a <= p ; ++i)
-    {
-        const auto val = acc_views[i + a] - acc_views[i];
-        if(sum < val)
+        const auto v = acc_viewer[i + adv] - acc_viewer[i]; // i지점에서 끝났을때 누적합
+        if(max_val < v)
         {
-            sum = val;
-            start = i;
+            max_val = v;
+            ans = i;
         }
     }
-    return ToTime(start);
+    return Int2Time(ans);
 }

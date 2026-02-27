@@ -1,75 +1,51 @@
 #include <bits/stdc++.h>
 using namespace std;
-int ta,tb;
-int A,B;
-vector<int> customers;
-int ex_temper;
-constexpr const int INF = 987654321;
+using ll = long long;
+int temperature_;
+int t1_;
+int t2_;
+int a_;
+int b_;
+vector<int> onboard_;
+int memo[1001][51][2];
+constexpr const int INF = (int)1e9;
 bool IsOk(const int temper)
 {
-    return temper >= ta && temper <= tb;
+    return t1_ <= temper && temper <= t2_;
 }
-int GetTemperDir(const int temper)
+int GetDeltaDir(const int temper)
 {
-    if(ex_temper > temper)
-    {
-        return 1;
-    }
-    else if(ex_temper < temper)
-    {
-        return -1;
-    }
-    else
-    {
-        return 0;
-    }
+    if(temper == temperature_)return 0;
+    return (temperature_ - temper) / abs(temperature_ - temper);
 }
-int memo[1001][200][2];
-int GO(const int idx, const int cur_temper, const bool cur_on)
+int GO(const int idx, const int cur_temper, const bool is_on)
 {
-    if(idx == customers.size()) return 0;
-    if(customers[idx] == 1 && !IsOk(cur_temper))
+    if(idx == onboard_.size())return 0;
+    if(onboard_[idx] && !IsOk(cur_temper))
     {
         return INF;
     }
-    auto& ref = memo[idx][cur_temper + 50][cur_on];
-    if(~ref) return ref;
-    if(cur_on) // 에어컨이 켜져있던 경우
+    if(cur_temper > 40 || cur_temper < -10)return INF;
+    auto& ref = memo[idx][cur_temper + 10][is_on];
+    if(~ref)return ref;
+    const int a = GO(idx + 1, cur_temper + 1, true) + a_;
+    const int b = GO(idx + 1, cur_temper - 1, true) + a_;
+    const int c = GO(idx + 1, cur_temper + GetDeltaDir(cur_temper), false); // 끈 채로 유지 또는 끈다
+    int d = INF;  
+    if(is_on)
     {
-        int a = INF, b = INF;
-        // 온도 범위(-10~40)를 벗어나지 않도록 체크
-        if(cur_temper + 1 <= 40) a = GO(idx+1, cur_temper + 1, 1) + A;
-        if(cur_temper - 1 >= -10) b = GO(idx+1, cur_temper - 1, 1) + A;
-        
-        const int c = GO(idx+1, cur_temper, 1) + B;
-        const int d = GO(idx+1, cur_temper + GetTemperDir(cur_temper), 0); // 끄기
-        return ref = min({a, b, c, d});
+        d = GO(idx + 1, cur_temper, true) + b_; // 켜져있는데 온도 유지
     }
-    else 
-    {
-        // 꺼진 상태 유지 (자연 변화)
-        const int a = GO(idx + 1, cur_temper + GetTemperDir(cur_temper), 0);
-        
-        int b = INF, c = INF;
-        if(cur_temper + 1 <= 40) b = GO(idx+1, cur_temper + 1, 1) + A; // 켜서 올리기
-        if(cur_temper - 1 >= -10) c = GO(idx+1, cur_temper - 1, 1) + A; // 켜서 내리기
-        
-        const int d = GO(idx+1, cur_temper, 1) + B; // 켜서 유지
-        return ref = min({a, b, c, d});
-    }
+    return ref = min({a,b,c,d});
 }
 int solution(int temperature, int t1, int t2, int a, int b, vector<int> onboard)
 {
-    int answer = 0;
-    ex_temper=temperature;
-    customers=onboard;
-    ta=t1;
-    tb=t2;
-    A = a;
-    B = b;
+    temperature_ = temperature;
+    t1_ = t1;
+    t2_ = t2;
+    a_ = a;
+    b_ = b;
+    onboard_ = onboard;
     memset(memo,-1,sizeof(memo));
-    const auto aa= GO(0,ex_temper, 1);
-    memset(memo,-1,sizeof(memo));
-    const auto bb =GO(0,ex_temper,0);
-    return min(aa,bb);
+    return GO(0,temperature,0);
 }

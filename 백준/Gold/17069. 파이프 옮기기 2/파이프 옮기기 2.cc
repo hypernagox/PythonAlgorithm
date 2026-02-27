@@ -1,80 +1,76 @@
 #include <bits/stdc++.h>
 using namespace std;
-constexpr const int INF = 987654321;
+void FastIO()noexcept { ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL); }
+constexpr const int INF = static_cast<int>(1e9);
+constexpr const int MIN_INF = -INF;
 using ll = long long;
 using ull = unsigned long long;
 using pi = pair<int, int>;
 using pll = pair<ll, ll>;
 using pull = pair<ull, ull>;
-int house[33][33];
+int board[33][33];
 int n;
-ull memo[3][33][33];
-bool CanGO(const int y, const int x)noexcept
+ll memo[33][33][3];
+bool CanGo(const int y, const int x)
 {
     if (y < 0 || x < 0 || y >= n || x >= n)return false;
-    if (house[y][x])return false;
+    if (board[y][x])return false;
     return true;
 }
-ull GO(const int cur_shape,const int y,const int x)noexcept
+ll GO(const int cur_y, const int cur_x, const int cur_state)
 {
-    if (y == n - 1 && x == n - 1)
+    if (cur_y == n - 1 && cur_x == n - 1)return 1;
+    const auto ny = cur_y + 1;
+    const auto nx = cur_x + 1;
+    auto& ref = memo[cur_y][cur_x][cur_state];
+    if (~ref)return ref;
+    ll res = 0;
+    if (CanGo(cur_y, nx) && CanGo(ny, cur_x) && CanGo(ny, nx))
     {
-        return 1;
+        res += GO(ny, nx, 2); // 대각
     }
-    auto& ref = memo[cur_shape][y][x];
-    if (-1 != ref)return ref;
-    ref = 0;
-    ull s = 0;
-    if (cur_shape == 0)
+    if (0 == cur_state) // 가로
     {
-        if (CanGO(y, x + 1))
+        if (CanGo(cur_y, nx))
         {
-            s += GO(cur_shape, y, x + 1);
-        }
-        if (CanGO(y + 1, x) && CanGO(y + 1, x + 1) && CanGO(y, x + 1))
-        {
-            s += GO(2, y + 1, x + 1);
+            res += GO(cur_y, nx, 0); // 가로유지
         }
     }
-    else if (cur_shape == 1)
+    else if (1 == cur_state) // 세로
     {
-        if (CanGO(y + 1, x))
+        if (CanGo(ny, cur_x))
         {
-            s += GO(cur_shape, y + 1, x);
-        }
-        if (CanGO(y + 1, x) && CanGO(y + 1, x + 1) && CanGO(y, x + 1))
-        {
-            s += GO(2, y + 1, x + 1);
+            res += GO(ny, cur_x, 1); // 세로유지
         }
     }
-    else if (cur_shape == 2)
+    else // 대각
     {
-        if (CanGO(y, x + 1))
+        if (CanGo(cur_y, nx))
         {
-            s += GO(0, y, x + 1);
+            res += GO(cur_y, nx, 0);
         }
-        if (CanGO(y + 1, x))
+        if (CanGo(ny, cur_x))
         {
-            s += GO(1, y + 1, x);
-        }
-        if (CanGO(y + 1, x) && CanGO(y + 1, x + 1) && CanGO(y, x + 1))
-        {
-            s += GO(2, y + 1, x + 1);
+            res += GO(ny, cur_x, 1);
         }
     }
-    return ref = s;
+    return ref = res;
 }
-int main()
+void Solve()noexcept
 {
-    ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
     cin >> n;
-    memset(memo, -1, sizeof(memo));
     for (int i = 0; i < n; ++i)
     {
         for (int j = 0; j < n; ++j)
         {
-            cin >> house[i][j];
+            cin >> board[i][j];
         }
     }
-    cout << GO(0, 0, 1);
+    memset(memo, -1, sizeof(memo));
+    cout << GO(0, 1, 0);
+}
+int main()
+{
+    FastIO();
+    Solve();
 }

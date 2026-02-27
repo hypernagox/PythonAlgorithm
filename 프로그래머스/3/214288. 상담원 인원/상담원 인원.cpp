@@ -1,59 +1,60 @@
 #include <bits/stdc++.h>
 using namespace std;
-vector<pair<int,int>> req[6];
-int mentors[6];
+using pi = pair<int,int>;
+int counsellers[6];
 int K;
 int N;
+vector<pi> human[6];
 int GetWaitTime(const int type)
 {
-    const auto num_mentors = mentors[type];
-    priority_queue<int,vector<int>,greater<int>> pq; // 끝나는 시간
-    for(int i=0;i<num_mentors;++i)pq.emplace(0);
-    int res = 0;
-    for(const auto [start_time, run_time] : req[type])
+    const auto num_coun = counsellers[type];
+    priority_queue<int,vector<int>,greater<int>> pq;
+    for(int i=0;i<num_coun;++i)
     {
-        const auto early_end_time = pq.top();
-        pq.pop();
-        if(early_end_time <= start_time)
-        {
-            pq.emplace(start_time + run_time);
-        }
-        else
-        {
-            res += (early_end_time - start_time);
-            pq.emplace(early_end_time + run_time);
-        }
+        pq.emplace(0);
     }
-    return res;
+    int wait_time = 0;
+    for(const auto [s, e] : human[type])
+    {
+        const auto end_time = pq.top();
+        pq.pop();
+        if(end_time > s)
+        {
+            wait_time += (end_time - s);
+        }
+        pq.emplace(max(end_time,s) + e);
+    }
+    return wait_time;
 }
-int ans = 987654321;
-void GO(const int idx, const int start)
+int answer = 987654321;
+void GO(const int cur, const int start)
 {
-    if(0 == idx)
+    if(cur == N)
     {
         int s = 0;
-        for(int i = 0;i < K;++i)
+        for(int i=0;i<K;++i)
         {
             s += GetWaitTime(i);
         }
-        ans = min(ans,s);
+        answer = min(answer,s);
         return;
     }
-    for(int i = start;i < K;++i)
+    for(int i=start; i < K ;++i)
     {
-        ++mentors[i];
-        GO(idx - 1,i);
-        --mentors[i];
+        ++counsellers[i];
+        GO(cur+1,i);
+        --counsellers[i];
     }
 }
-int solution(int k, int n, vector<vector<int>> reqs)
+int solution(int k, int n, vector<vector<int>> reqs) 
 {
-    for(const auto& v :reqs)
+    K = k;
+    N = n - k;
+    fill(counsellers,counsellers + 6,1);
+    for(const auto& r :reqs)
     {
-        req[v[2] - 1].emplace_back(v[0], v[1]);
+        human[r[2] - 1].emplace_back(r[0],r[1]);
     }
-    N = n;
-    fill(mentors,mentors + k,1);
-    GO(n - (K = k),0);
-    return ans;
+    GO(0 , 0);
+    return answer;
 }

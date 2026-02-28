@@ -1,48 +1,34 @@
 #include <bits/stdc++.h>
 using namespace std;
-long long ToNumber(const string& s)
+using ll = long long;
+string solution(long long n, vector<string> bans) 
 {
-    long long res = 0;
-    for (char ch : s)
-    {
-        res = res * 26 + (ch - 'a' + 1);
-    }
-    return res;
-}
-string ToString(long long n)
-{
-    string temp="";
-    while(n)
-    {
-        --n;
-        const auto a = n%26;
-        temp.push_back(a + 'a' - 0);
-        n /= 26;
-    }
-    reverse(temp.begin(),temp.end());
-    return temp;
-}
-string solution(long long n, vector<string> bans) {
     string answer = "";
     vector<long long> nums;
-    for(const auto s:bans)
+    nums.reserve(bans.size());
+    for(const auto& s: bans)
     {
-      // cout<<s<<": "<<ToNumber(s)<<endl;
-        nums.emplace_back(ToNumber(s));
+        ll r = 0;
+        for(int i=0;i < s.size(); ++i)
+        {
+            r = (r * 26) + (s[i] - 'a' + 1);
+        }
+        nums.emplace_back(r - 0);
     }
     sort(nums.begin(),nums.end());
-    //--n;
-    for(int i=0;i<nums.size();++i)
+    for(const auto i : nums)
     {
-        if(nums[i] <= n)
-        {
-            ++n;
-        }
-        else
-        {
-            break;
-        }
+        if(i <= n)++n;
+        else break;
     }
-   // cout<<n<<endl;
-    return answer = ToString(n - 0);
+    auto target = n;
+    while(target > 0)
+    {
+        --target;
+        const auto rem = (target) % 26LL;
+        target /= 26LL;
+        answer.push_back('a' + rem);
+    }
+    reverse(answer.begin(),answer.end());
+    return answer;
 }

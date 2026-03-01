@@ -35,10 +35,7 @@ void Solve()noexcept
         --zadu[i];
     }
     memset(memo, -1, sizeof(memo));
-    const auto a = GO(0, w, 0);
-    memset(memo, -1, sizeof(memo));
-    const auto b = GO(0, w - 1, 1);
-    cout << max(a, b);
+    cout << max(GO(0, w, 0), GO(0, w - 1, 1));
 }
 int main()
 {

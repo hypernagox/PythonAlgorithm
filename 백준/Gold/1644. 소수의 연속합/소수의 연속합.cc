@@ -8,53 +8,44 @@ using ull = unsigned long long;
 using pi = pair<int, int>;
 using pll = pair<ll, ll>;
 using pull = pair<ull, ull>;
-
-constexpr const int LIM = 4000000;
+constexpr const int LIM = 4000001;
 bool IsPrime[LIM + 1];
 vector<int> primes;
-
 void Init()
 {
-    fill(begin(IsPrime), end(IsPrime), true);
-    IsPrime[0] = IsPrime[1] = false;
-
-    for (int i = 2; 1LL * i * i <= LIM; ++i)
+    fill(begin(IsPrime), end(IsPrime), 1);
+    IsPrime[0] = IsPrime[1] = 0;
+    for (int i = 2; i <= (int)sqrt(LIM); ++i)
     {
-        if (!IsPrime[i]) continue;
-        for (int j = i * i; j <= LIM; j += i)
+        if (!IsPrime[i])continue;
+        for (int j = i + i; j <= LIM; j += i)
         {
-            IsPrime[j] = false;
+            IsPrime[j] = 0;
         }
     }
-
-    primes.clear();
-    for (int i = 2; i <= LIM; ++i)
+    for (int i = 2; i <= (LIM); ++i)
     {
-        if (IsPrime[i]) primes.emplace_back(i);
+        if (!IsPrime[i])continue;
+        primes.emplace_back(i);
     }
 }
-
 void Solve()noexcept
 {
     Init();
     int n; cin >> n;
-
     ll res = 0;
     int sum = 0;
+    int b = 0;
     int e = 0;
-
-    for (int b = 0; b < (int)primes.size(); ++b)
+    while (e < primes.size() || b < primes.size())
     {
-        while (sum < n && e < (int)primes.size())
-        {
-            sum += primes[e++];
-        }
-        if (sum == n) ++res;
-        sum -= primes[b];
+        if (sum >= n)sum -= primes[b++];
+        else if (e < primes.size())sum += primes[e++];
+        else break;
+        if (sum == n)++res;
     }
     cout << res;
 }
-
 int main()
 {
     FastIO();

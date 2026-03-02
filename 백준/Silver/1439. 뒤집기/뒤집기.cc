@@ -11,21 +11,8 @@ using pull = pair<ull, ull>;
 void Solve()noexcept
 {
     string str; cin >> str;
-    string stack;
-    int cnt[2]{};
-    for (const auto ch : str)
-    {
-        if (stack.empty() || stack.back() == ch)
-        {
-            stack.push_back(ch);
-            continue;
-        }
-        ++cnt[stack.back() - '0'];
-        stack.clear();
-        stack.push_back(ch);
-    }
-    ++cnt[stack.back() - '0'];
-    cout << min(cnt[0], cnt[1]);
+    const auto last = ranges::unique(str).begin();
+    cout << min(ranges::count(str.begin(),last ,'0'), ranges::count(str.begin(),last ,'1'));
 }
 int main()
 {

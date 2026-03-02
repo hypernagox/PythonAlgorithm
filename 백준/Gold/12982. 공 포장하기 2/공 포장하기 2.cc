@@ -1,0 +1,2 @@
+#include <bits/stdc++.h> 
+using namespace std; using i = int;i k; i cnt[100000];int main(){ios::sync_with_stdio(false);cin.tie(0); cin >> k;i res = 0;for (i I = 0; I < k; ++I) {i t; cin >> t;auto d = div(t, k);res += d.quot;++cnt[d.rem];}i r = k; i mn = 1 << 30;for (int i = 0; r && i < k; ++i) mn = min(mn, i + (r -= cnt[i]));cout << res + mn;}

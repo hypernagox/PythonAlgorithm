@@ -16,8 +16,9 @@ bool Check(const int mid)
     for (int i = 0; i < n; ++i)
     {
         s += (arr[i] / mid);
+        if (s >= m)return true;
     }
-    return s >= m;
+    return false;
 }
 void Solve()noexcept
 {

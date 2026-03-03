@@ -9,7 +9,7 @@ using pi = pair<int, int>;
 using pll = pair<ll, ll>;
 using pull = pair<ull, ull>;
 int n, m, k;
-map<int, ll> adj[100001]; // a번 도시에 연결된 {간선,비용} map
+vector<pll> adj[100001]; // a번 도시에 연결된 {간선,비용} map
 ll dists[100001]; // a번 도시에서 면접장까지의 최단거리
 void Solve()noexcept
 {
@@ -17,15 +17,7 @@ void Solve()noexcept
     for (int i = 0; i < m; ++i)
     {
         int a, b, c; cin >> a >> b >> c;
-        auto& prev_dist = adj[b][a];
-        if (0 == prev_dist) 
-        {
-            prev_dist = c;
-        }
-        else
-        {
-            prev_dist = min(prev_dist, (ll)c);
-        }
+        adj[b].emplace_back(a, c);
     }
     fill(begin(dists), end(dists), INT64_MAX / 2);
     priority_queue<pll, vector<pll>, greater<pll>> pq;

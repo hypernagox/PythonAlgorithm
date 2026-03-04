@@ -1,27 +1,25 @@
 #include <bits/stdc++.h>
 using namespace std;
-
 int solution(int n, vector<int> stations, int w)
 {
-    int answer = 0;
-    const auto step = (w*2)+1;
-    int pos = 1; // 커버를 시작해야함
-    for(int i=0;i<stations.size();++i)
+    const auto rad = (2 * w) + 1;
+    sort(stations.begin(),stations.end());
+    int start = 1; // 전파가 도달하지 않는 것으로 알고있는 시작점
+    int ans = 0;
+    for(const auto s : stations)
     {
-        const auto left = stations[i]-w;
-        const auto right = stations[i]+w;
-        if(pos < left)
+        const auto left = s - w;
+        const auto right = s + w;
+        // 전파가 도달하는 가장 가까운곳이 내가 아는곳 보다 멀리있다 빈 구간이 있다.
+        if(start < left)
         {
-            const int gap = left - pos;
-            answer += (int)ceil(gap / (float)step); // 빈구간은 이만큼 필요
+            ans += ((left - start) + (rad - 1)) / rad;
         }
-        pos = right + 1;
+        start = right + 1;
     }
-    // 커버를 시작해야하는 부분이 n보다 작거나 같다면
-    if(pos <= n)
+    if(start < n + 1)
     {
-        const auto gap = n - pos + 1;
-        answer += (int)ceil(gap / (float)step);
+         ans += ((n + 1 - start) + (rad - 1)) / rad;
     }
-    return answer;
+    return ans;
 }

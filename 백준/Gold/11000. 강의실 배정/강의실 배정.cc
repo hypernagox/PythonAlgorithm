@@ -16,13 +16,8 @@ void Solve()noexcept
     {
         cin >> arr[i].first >> arr[i].second;
     }
-    //sort(arr, arr + n, [](auto a, auto b) {
-    //    if (a.second == b.second)return a.first > b.first;
-    //    return a.second > b.second;
-    //    });
     sort(arr, arr + n);
     priority_queue<int, vector<int>, greater<int>> pq;
-    int ans = 1;
     pq.emplace(arr[0].second);
     for (int i = 1; i < n; ++i)
     {
@@ -31,11 +26,10 @@ void Solve()noexcept
         if (end_time > arr[i].first)
         {
             pq.emplace(end_time);
-            ++ans;
         }
         pq.emplace(arr[i].second);
     }
-    cout << ans;
+    cout << pq.size();
 }
 int main()
 {

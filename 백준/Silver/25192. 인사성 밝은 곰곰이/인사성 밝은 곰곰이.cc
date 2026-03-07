@@ -13,14 +13,14 @@ void Solve()noexcept
     int n; cin >> n;
     int ans = 0;
     bool flag = false;
-    set<string>& s = *new set<string>{};
+    set<string> s;
     while (n--)
     {
         string msg; cin >> msg;
         if ("ENTER" == msg)
         {
             ans += s.size();
-            s = *new set<string>{};
+            s.clear();
         }
         else
         {

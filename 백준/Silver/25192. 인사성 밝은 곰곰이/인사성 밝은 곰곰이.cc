@@ -12,19 +12,19 @@ void Solve()noexcept
 {
     int n; cin >> n;
     int ans = 0;
-    bool flag = false;
     unordered_set<string> s = *new unordered_set<string>{};
     while (n--)
     {
-        string msg; cin >> msg;
-        if ("ENTER" == msg)
+        char msg[21]{};
+        cin >> msg;
+        if ("ENTER" == string_view{ msg })
         {
             ans += s.size();
             s = *new unordered_set<string>{};
         }
         else
         {
-            s.emplace(move(msg));
+            s.emplace(string_view{msg});
         }
     }
     cout << ans + s.size();

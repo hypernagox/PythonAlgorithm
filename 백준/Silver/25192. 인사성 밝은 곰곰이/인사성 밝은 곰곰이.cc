@@ -13,9 +13,9 @@ void Solve()noexcept
     int n; cin >> n;
     int ans = 0;
     unordered_set<string> s = *new unordered_set<string>{};
+    char msg[21];
     while (n--)
     {
-        char msg[21]{};
         cin >> msg;
         if ("ENTER" == string_view{ msg })
         {
@@ -24,7 +24,7 @@ void Solve()noexcept
         }
         else
         {
-            s.emplace(string_view{msg});
+            s.emplace(msg);
         }
     }
     cout << ans + s.size();

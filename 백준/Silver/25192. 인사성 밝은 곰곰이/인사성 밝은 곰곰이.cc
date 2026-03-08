@@ -12,22 +12,27 @@ void Solve()noexcept
 {
     int n; cin >> n;
     int ans = 0;
-    set<string>* s = new set<string>{};
+    vector<string> v; v.reserve(n);
     char msg[21];
     while (n--)
     {
         cin >> msg;
         if ("ENTER" == string_view{ msg })
         {
-            ans += s->size();
-            s = new set<string>{};
+            ranges::sort(v);
+            const auto [b, e] = ranges::unique(v);
+            ans += b - v.begin();
+            v.clear();
         }
         else
         {
-            s->emplace(msg);
+            v.emplace_back(move(msg));
         }
     }
-    cout << ans + s->size();
+    ranges::sort(v);
+    const auto [b, e] = ranges::unique(v);
+    ans += b - v.begin();
+    cout << ans;
 }
 int main()
 {

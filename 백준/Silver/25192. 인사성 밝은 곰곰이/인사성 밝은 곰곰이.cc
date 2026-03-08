@@ -12,22 +12,22 @@ void Solve()noexcept
 {
     int n; cin >> n;
     int ans = 0;
-    unordered_set<string> s = *new unordered_set<string>{};
+    set<string>* s = new set<string>{};
     char msg[21];
     while (n--)
     {
         cin >> msg;
         if ("ENTER" == string_view{ msg })
         {
-            ans += s.size();
-            s = *new unordered_set<string>{};
+            ans += s->size();
+            s = new set<string>{};
         }
         else
         {
-            s.emplace(msg);
+            s->emplace(msg);
         }
     }
-    cout << ans + s.size();
+    cout << ans + s->size();
 }
 int main()
 {

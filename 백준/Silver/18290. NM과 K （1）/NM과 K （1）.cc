@@ -28,7 +28,7 @@ bool Check(const int y, const int x)
     }
     return true;
 }
-void GO(const int depth)
+void GO(const int y,const int x, const int depth)
 {
     if (depth == k)
     {
@@ -40,14 +40,14 @@ void GO(const int depth)
         ans = max(ans, s);
         return;
     }
-    for (int i = 0; i < n; ++i)
+    for (int i = y; i < n; ++i)
     {
-        for (int j = 0; j < m; ++j)
+        for (int j = x; j < m; ++j)
         {
             if (visited[i][j] || !Check(i, j))continue;
             visited[i][j] = 1;
             v.emplace_back(i, j);
-            GO(depth + 1);
+            GO(y, x, depth + 1);
             v.pop_back();
             visited[i][j] = 0;
         }
@@ -64,7 +64,7 @@ void Solve()noexcept
             cin >> board[i][j];
         }
     }
-    GO(0);
+    GO(0, 0, 0);
     cout << ans;
 }
 int main()

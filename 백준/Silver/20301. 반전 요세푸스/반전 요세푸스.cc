@@ -12,61 +12,39 @@ void Solve() noexcept
 {
     int n, k, m;
     cin >> n >> k >> m;
-    vector<int> v(n);
-    iota(v.begin(), v.end(), 1);
-    int dir = 1;
-    int cur_pos = 0;
-    int removed = 0;
-    while (!v.empty())
+    deque<int> dq;
+    for (int i = 1; i <= n; ++i)
     {
-        int sz = static_cast<int>(v.size());
-        int target;
-
-        if (dir == 1)
+        dq.push_back(i);
+    }
+    bool forward = true;
+    int removed = 0;
+    while (!dq.empty())
+    {
+        if (forward)
         {
-            target = (cur_pos + k - 1) % sz;
-        }
-        else
-        {
-            target = (cur_pos - (k - 1)) % sz;
-            if (target < 0)
+            for (int i = 0; i < k - 1; ++i)
             {
-                target += sz;
+                dq.push_back(dq.front());
+                dq.pop_front();
             }
-        }
-
-        cout << v[target] << '\n';
-        v.erase(v.begin() + target);
-        ++removed;
-
-        if (v.empty())
-        {
-            break;
-        }
-
-        int new_sz = static_cast<int>(v.size());
-
-        int next_same;
-        int next_flip;
-
-        if (dir == 1)
-        {
-            next_same = target % new_sz;                 
-            next_flip = (target - 1 + new_sz) % new_sz;    
+            cout << dq.front() << '\n';
+            dq.pop_front();
         }
         else
         {
-            next_same = (target - 1 + new_sz) % new_sz;   
-            next_flip = target % new_sz;                
+            for (int i = 0; i < k - 1; ++i)
+            {
+                dq.push_front(dq.back());
+                dq.pop_back();
+            }
+            cout << dq.back() << '\n';
+            dq.pop_back();
         }
+        ++removed;
         if (removed % m == 0)
         {
-            dir = -dir;
-            cur_pos = next_flip;
-        }
-        else
-        {
-            cur_pos = next_same;
+            forward = !forward;
         }
     }
 }

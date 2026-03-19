@@ -11,19 +11,20 @@ using pull = pair<ull, ull>;
 void Solve() noexcept
 {
     int t; cin >> t;
-    unordered_set<int> us; us.reserve(1000001);
+    vector<int> us; us.reserve(1000001);
     while (t--)
     {
         int n; cin >> n;
         while (n--)
         {
-            int x; cin >> x; us.emplace(x);
+            int x; cin >> x; us.emplace_back(x);
         }
+        ranges::sort(us);
         cin >> n;
         while (n--)
         {
             int x; cin >> x;
-            cout << us.count(x) << '\n';
+            cout << ranges::binary_search(us,x) << '\n';
         }
         us.clear();
     }

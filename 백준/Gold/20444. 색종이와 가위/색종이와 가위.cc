@@ -31,7 +31,7 @@ void Solve() noexcept
             l = mid + 1;
         }
     }
-    if (ans <= n && (ans + 1) * (n - ans + 1) == k)cout << "YES";
+    if ((ans + 1) * (n - ans + 1) == k)cout << "YES";
     else cout << "NO";
 }
 int main()

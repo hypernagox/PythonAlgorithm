@@ -21,21 +21,18 @@ void Solve() noexcept
     {
         const auto mid = (l + r) / 2LL;
         const auto val = (mid + 1) * (n - mid + 1);
-        if (val == k)
+        if (val >= k)
         {
             ans = mid;
-            cout << "YES"; return;
-        }
-        else if(val < k)
-        {
-            l = mid + 1;
+            r = mid;
         }
         else
         {
-            r = mid;
+            l = mid + 1;
         }
     }
-    cout << "NO";
+    if (ans <= n && (ans + 1) * (n - ans + 1) == k)cout << "YES";
+    else cout << "NO";
 }
 int main()
 {

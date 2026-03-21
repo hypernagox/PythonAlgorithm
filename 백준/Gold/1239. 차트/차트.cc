@@ -30,7 +30,7 @@ void Solve() noexcept
                 }
             }
         }
-        ans = max(ans, cnt - 1);
+        ans = max(ans, cnt - 1);    // 절반을 가르는 선 마지막 하나가 중복임 (시작과 끝)
     } while (next_permutation(arr, arr + n));
     cout << ans;
 }

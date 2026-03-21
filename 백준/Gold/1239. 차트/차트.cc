@@ -20,7 +20,7 @@ void Solve() noexcept
         for (int i = 0; i < n; ++i)
         {
             int s = 0;
-            for (int j = i + 1; j < n; ++j)
+            for (int j = i; j < n; ++j)
             {
                 s += arr[j];
                 if (s >= 50)
@@ -30,7 +30,7 @@ void Solve() noexcept
                 }
             }
         }
-        ans = max(ans, cnt);
+        ans = max(ans, cnt - 1);
     } while (next_permutation(arr, arr + n));
     cout << ans;
 }

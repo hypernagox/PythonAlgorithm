@@ -12,8 +12,7 @@ int dp[1001][1001];
 pi dosi[1001];
 bool sdosi[1001];
 int t;
-int specialDist[1001];
-int GetDist(const int i, const int j)
+int GetCost(const int i, const int j)
 {
     int val = INF;
     if (sdosi[i] && sdosi[j])val = t;
@@ -33,28 +32,28 @@ void Solve() noexcept
     }
     for (int i = 1; i <= n; ++i)
     {
-        specialDist[i] = INF;
-        if (sdosi[i])
-        {
-            specialDist[i] = 0;
-            continue;
-        }
         for (int j = 1; j <= n; ++j)
         {
-            if (!sdosi[j]) continue;
-            specialDist[i] = min(specialDist[i], GetDist(i, j));
+            dp[i][j] = GetCost(i, j);
         }
     }
-    int m;
-    cin >> m;
-    while (m--)
+    for (int k = 1; k <= n; ++k)
     {
-        int a, b;
-        cin >> a >> b;
-        const int direct = GetDist(a, b);
-        const int teleport = specialDist[a] + t + specialDist[b];
-        cout << min(direct, teleport) << '\n';
+        for (int i = 1; i <= n; ++i)
+        {
+            for (int j = 1; j <= n; ++j)
+            {
+                dp[i][j] = min(dp[i][j], dp[i][k] + dp[k][j]);
+            }
+        }
     }
+    int T; cin >> T;
+    while (T--)
+    {
+        int a, b; cin >> a >> b;
+        cout << dp[a][b] << '\n';
+    }
+    
 }
 int main()
 {

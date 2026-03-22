@@ -9,34 +9,29 @@ using pi = pair<int, int>;
 using pll = pair<ll, ll>;
 using pull = pair<ull, ull>;
 int arr[100001];
-map<int, int> mm;
-bool DecAndErase(const auto target)
-{
-    if (mm.end() == target)return false;
-    if (--target->second == 0)
-    {
-        mm.erase(target);
-    }
-    return true;
-}
 void Solve() noexcept
 {
     int n, m; cin >> n >> m;
-   
     for (int i = 0; i < n; ++i)
     {
         cin >> arr[i];
-        ++mm[arr[i]];
     }
+    sort(arr, arr + n);
     int ans = 0;
-    for (int i = 0; i < n; ++i)
+    int l = 0;
+    int r = n - 1;
+    while (l < r)
     {
-        if (!DecAndErase(mm.find(arr[i])))continue;
-        const auto iter = mm.lower_bound(m - arr[i]);
-        if (mm.end() != iter)
+        const auto val = arr[l] + arr[r];
+        if (val >= m)
         {
+            ++l;
+            --r;
             ++ans;
-            DecAndErase(iter);
+        }
+        else
+        {
+            ++l;
         }
     }
     cout << ans;

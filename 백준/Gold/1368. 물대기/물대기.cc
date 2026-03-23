@@ -32,31 +32,29 @@ void Solve() noexcept
         }
     }
     int ans = INF;
+    priority_queue<pi, vector<pi>, greater<pi>> pq;
     for (int k = 0; k < n; ++k)
     {
-        priority_queue<pi, vector<pi>, greater<pi>> pq;
         pq.emplace(costs[k], k);
-        bool visited[301]{};
-        int s = 0;
-        while (pq.size())
-        {
-            const auto [cost, cur] = pq.top();
-            pq.pop();
-            if (visited[cur])continue;
-            visited[cur] = 1;
-            s += cost;
-           // cout << s << endl;
-            for (int i = 0; i < n; ++i)
-            {
-                if (cur == i)continue;
-                if (visited[i])continue;
-                const auto new_cost = min(mat[cur][i], costs[i]);
-                pq.emplace(new_cost, i);
-            }
-        }
-        //cout << endl;
-        ans = min(ans, s);
     }
+    bool visited[301]{};
+    int s = 0;
+    while (pq.size())
+    {
+        const auto [cost, cur] = pq.top();
+        pq.pop();
+        if (visited[cur])continue;
+        visited[cur] = 1;
+        s += cost;
+        for (int i = 0; i < n; ++i)
+        {
+            if (cur == i)continue;
+            if (visited[i])continue;
+            const auto new_cost = min(mat[cur][i], costs[i]);
+            pq.emplace(new_cost, i);
+        }
+    }
+    ans = min(ans, s);
     cout << ans;
 }
 int main()

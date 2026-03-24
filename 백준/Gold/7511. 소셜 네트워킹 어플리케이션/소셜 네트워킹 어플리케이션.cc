@@ -8,17 +8,29 @@ using ull = unsigned long long;
 using pi = pair<int, int>;
 using pll = pair<ll, ll>;
 using pull = pair<ull, ull>;
-vector<int> adj[1000001];
-int visited[1000001];
-void GO(const int cur, const int num)
+struct DisjointSet
 {
-    visited[cur] = num;
-    for (const auto next : adj[cur])
+    vector<int> parents;
+    DisjointSet(const int n) :parents(n + 1)
     {
-        if (visited[next])continue;
-        GO(next, num);
+        iota(parents.begin(), parents.end(), 0);
     }
-}
+    int FindParent(const int cur)
+    {
+        auto& parent = parents[cur];
+        if (cur == parent)return cur;
+        return parent = FindParent(parent);
+    }
+    bool Union(int a, int b)
+    {
+        a = FindParent(a);
+        b = FindParent(b);
+        if (a == b)return false;
+        if (a > b)swap(a, b);
+        parents[b] = a;
+        return true;
+    }
+};
 void Solve() noexcept
 {
     int t; cin >> t;
@@ -27,28 +39,21 @@ void Solve() noexcept
     while (t--)
     {
         int n, k; cin >> n >> k;
+        DisjointSet ds{ n };
         while (k--)
         {
             int a, b; cin >> a >> b;
-            adj[a].emplace_back(b);
-            adj[b].emplace_back(a);
+            ds.Union(a, b);
         }
         int m; cin >> m;
-        for (int i = 0; i < n; ++i)
-        {
-            if (visited[i])continue;
-            GO(i, i + 1);
-        }
         *next(++str.rbegin()) = (cnt++) + '0';
         cout << str;
         while (m--)
         {
             int a, b; cin >> a >> b;
-            cout << (visited[a] == visited[b]) << '\n';
+            cout << (ds.FindParent(a) == ds.FindParent(b)) << '\n';
         }
         cout << '\n';   
-        ranges::for_each(adj, adj + n, &vector<int>::clear);
-        memset(visited, 0, sizeof(visited));
     }
 }
 int main()

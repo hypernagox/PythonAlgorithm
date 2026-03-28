@@ -53,11 +53,6 @@ void Solve() noexcept
             ans = mid;
             right = mid;
         }
-       // else
-       // {
-       //     ans =  mid;
-       //     left = mid + 1;
-       // }
     }
     cout << ans;
 }

@@ -36,7 +36,7 @@ void Solve() noexcept
         cin >> arr[i].second >> arr[i].first;
     }
     sort(arr, arr + k);
-    ll low = 0;
+    ll low = 1;
     ll high = INT32_MAX + 1LL;
     ll ans = -1;
     while (low < high)

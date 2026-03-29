@@ -36,25 +36,23 @@ void Solve() noexcept
         cin >> arr[i].second >> arr[i].first;
     }
     sort(arr, arr + k);
-    priority_queue<ll, vector<ll>, greater<ll>> pq;
-    ll total = 0;
-    for (int i = 0; i < k; ++i)
+    ll low = 1;
+    ll high = INT32_MAX + 1LL;
+    ll ans = -1;
+    while (low < high)
     {
-        const auto [level, prio] = arr[i];
-        total += prio;
-        pq.emplace(prio);
-        if (pq.size() > n)
+        const auto mid = low + (high - low) / 2LL;
+        if (Check(mid))
         {
-            total -= pq.top();
-            pq.pop();
+            ans = mid;
+            high = mid;
         }
-        if (pq.size() == n && total >= m)
+        else
         {
-            cout << level;
-            return;
+            low = mid + 1;
         }
     }
-    cout << -1;
+    cout << ans;
 }
 int main()
 {

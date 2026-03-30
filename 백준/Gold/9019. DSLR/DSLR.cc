@@ -40,7 +40,7 @@ constexpr const char commands[]{ "DSLR" };
 //string visited[10000];
 char visited[10000];
 int SS, EE;
-unordered_map<int, int> parents;
+int parents[10000];
 void GO(const int n)
 {
     if (n == SS)return;
@@ -57,7 +57,7 @@ void Solve() noexcept
     string start, end;
     //unordered_set<string> visited; visited.reserve(1024);
     deque<int> q;
-    parents.reserve(1024);
+    //parents.reserve(1024);
     //string res;
     //res.reserve(1000);
     while (t--)
@@ -96,9 +96,16 @@ void Solve() noexcept
                 ////cout << path << '\n';
                 break;
             }
+
             for (int i = 0; i < 4; ++i)
             {
-                auto next = m[commands[i]](cur);
+                int next = 0;
+                if (commands[i] == 'D')next = D(cur);
+                else if(commands[i] == 'S')next = S(cur);
+                else if (commands[i] == 'L')next = L(cur);
+                else if (commands[i] == 'R')next = R(cur);
+                    
+                //auto next = m[commands[i]](cur);
                 //auto& path = visited[next];
                 if (visited[(next)])continue;
                 //auto t = visited[stoi(cur)];
@@ -117,7 +124,7 @@ void Solve() noexcept
         memset(visited, 0, sizeof(visited));
        // visited.clear();
         q.clear();
-        parents.clear();
+        //memset(parents, -1, sizeof(parents));
         cout << '\n';
        // for (auto& s : visited)s.clear();
     }

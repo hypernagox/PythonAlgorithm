@@ -99,13 +99,13 @@ void Solve() noexcept
 
             for (int i = 0; i < 4; ++i)
             {
-                int next = 0;
-                if (commands[i] == 'D')next = D(cur);
-                else if(commands[i] == 'S')next = S(cur);
-                else if (commands[i] == 'L')next = L(cur);
-                else if (commands[i] == 'R')next = R(cur);
+                //int next = 0;
+                //if (commands[i] == 'D')next = D(cur);
+                //else if(commands[i] == 'S')next = S(cur);
+                //else if (commands[i] == 'L')next = L(cur);
+                //else if (commands[i] == 'R')next = R(cur);
                     
-                //auto next = m[commands[i]](cur);
+                auto next = m[commands[i]](cur);
                 //auto& path = visited[next];
                 if (visited[(next)])continue;
                 //auto t = visited[stoi(cur)];

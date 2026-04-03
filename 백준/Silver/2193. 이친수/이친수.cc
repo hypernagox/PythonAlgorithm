@@ -8,26 +8,26 @@ using ull = unsigned long long;
 using pi = pair<int, int>;
 using pll = pair<ll, ll>;
 using pull = pair<ull, ull>;
-ll memo[91];
-ll GO(const int num)
+ll memo[91][2];
+ll GO(const int num, const int last)
 {
-    if (num == 0)return 0;
-    if (num == 1)return 1;
-    if (num == 2)return 1;
-    auto& ref = memo[num];
+    if (num == 1)return last;
+    if (num == 2)return !last;
+    auto& ref = memo[num][last];
     if (ref)return ref;
-    return ref = GO(num - 1) + GO(num - 2);
+    if (last)
+    {
+        return ref = GO(num - 1, 0);
+    }
+    else
+    {
+        return ref = GO(num - 1, 0) + GO(num - 1, 1);
+    }
 }
 void Solve() noexcept
 {
-    // 1
-    // 10
-    // 100 101
-    // 100 + ? , 101 + ?
-    // 1000 1001 1010
-    // 
     int n; cin >> n;
-    cout << GO(n);
+    cout << GO(n, 0) + GO(n, 1);
 }
 int main()
 {

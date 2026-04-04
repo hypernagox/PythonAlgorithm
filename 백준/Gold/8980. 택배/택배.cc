@@ -18,7 +18,7 @@ struct Data
         return to < d.to;
     }
 };
-Data items[2001];
+Data items[10001];
 int capacities[2001];
 void Solve() noexcept
 {
@@ -37,7 +37,9 @@ void Solve() noexcept
         const auto remain_cap = *min_element(capacities + from, capacities + to);
         const auto delta = min(amount, remain_cap);
         ans += delta;
-        for (int j = from; j < to; ++j)capacities[j] -= delta;
+        transform(capacities + from, capacities + to, capacities + from, [delta](const int num) {
+            return num - delta;
+            });
     }
     cout << ans;
 }

@@ -8,7 +8,7 @@ using ull = unsigned long long;
 using pi = pair<int, int>;
 using pll = pair<ll, ll>;
 using pull = pair<ull, ull>;
-ll arr[1000000];
+ll arr[10000];
 ll n, k;
 bool Check(const ll mid)
 {

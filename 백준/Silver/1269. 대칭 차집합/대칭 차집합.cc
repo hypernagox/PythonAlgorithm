@@ -15,17 +15,17 @@ void Solve() noexcept
     int n, m; cin >> n >> m;
     for (int i = 0; i < n; ++i)cin >> A[i];
     for (int i = 0; i < m; ++i)cin >> B[i];
-    sort(A, A + n);
-    sort(B, B + m);
+    ranges::sort(A, A + n);
+    ranges::sort(B, B + m);
     int a_size = n;
     int b_size = m;
     for (int i = 0; i < n; ++i)
     {
-        b_size -= binary_search(B, B + m, A[i]);
+        b_size -= ranges::binary_search(B, B + m, A[i]);
     }
     for (int i = 0; i < m; ++i)
     {
-        a_size -= binary_search(A, A + n, B[i]);
+        a_size -= ranges::binary_search(A, A + n, B[i]);
     }
     cout << a_size + b_size;
 }

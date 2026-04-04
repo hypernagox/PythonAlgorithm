@@ -29,16 +29,15 @@ void Solve() noexcept
         int a, b, c; cin >> a >> b >> c;
         items[i] = Data{ a - 1,b - 1,c };
     }
-    sort(items, items + n);
+    sort(items, items + m);
     int ans = 0;
-    for (const auto [from, to, amount] : items)
+    for (int i = 0; i < m; ++i)
     {
+        const auto [from, to, amount] = items[i];
         const auto remain_cap = *min_element(capacities + from, capacities + to);
         const auto delta = min(amount, remain_cap);
         ans += delta;
-        transform(capacities + from, capacities + to, capacities + from, [delta](const int num) {
-            return num - delta;
-            });
+        for (int j = from; j < to; ++j)capacities[j] -= delta;
     }
     cout << ans;
 }

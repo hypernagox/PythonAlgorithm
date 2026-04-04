@@ -8,16 +8,16 @@ using ull = unsigned long long;
 using pi = pair<int, int>;
 using pll = pair<ll, ll>;
 using pull = pair<ull, ull>;
-ll arr[10001];
-int n, k;
-ll Check(const ll mid)
+ll arr[1000000];
+ll n, k;
+bool Check(const ll mid)
 {
     ll s = 0;
     for (int i = 0; i < n; ++i)
     {
         s += arr[i] / mid;
     }
-    return s;
+    return s >= k;
 }
 void Solve() noexcept
 {
@@ -26,21 +26,20 @@ void Solve() noexcept
     {
         cin >> arr[i];
     }
-    ll l = 1;
-    ll r = INT32_MAX;
-    ll ans = l;
-    while (l < r)
+    ll low = 1;
+    ll high = INT32_MAX + 1LL;
+    ll ans = 1;
+    while (low < high)
     {
-        const auto mid = (l + r) / 2LL;
-        const auto capacity = Check(mid);
-        if (capacity >= k)
+        const auto mid = low + (high - low) / 2LL;
+        if (Check(mid))
         {
             ans = mid;
-            l = mid + 1;
+            low = mid + 1;
         }
         else
         {
-            r = mid;
+            high = mid;
         }
     }
     cout << ans;

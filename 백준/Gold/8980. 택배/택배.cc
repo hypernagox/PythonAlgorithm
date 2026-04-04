@@ -37,9 +37,7 @@ void Solve() noexcept
         const auto remain_cap = *min_element(capacities + from, capacities + to);
         const auto delta = min(amount, remain_cap);
         ans += delta;
-        transform(capacities + from, capacities + to, capacities + from, [delta](const int num) {
-            return num - delta;
-            });
+        for (int j = from; j < to; ++j)capacities[j] -= delta;
     }
     cout << ans;
 }

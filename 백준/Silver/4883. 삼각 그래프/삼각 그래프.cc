@@ -19,7 +19,7 @@ ll GO(const int y, const int x)
         return board[y][x];
     }
     auto& ref = memo[y][x];
-    if (~ref)return ref;
+    if (INF != ref)return ref;
     ll a = INF;
     ll b = INF;
     ll c = INF;
@@ -51,7 +51,7 @@ void Solve() noexcept
     {
         cin >> n;
         if (0 == n)return;
-        memset(memo, -1, sizeof(memo));
+        fill(&memo[0][0], &memo[0][0] + sizeof(memo)/sizeof(memo[0][0]), INF);
         for (int i = 0; i < n; ++i)
         {
             for (int j = 0; j < 3; ++j)

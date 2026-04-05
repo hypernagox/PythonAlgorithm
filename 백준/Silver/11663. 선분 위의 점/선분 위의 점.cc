@@ -16,12 +16,12 @@ void Solve() noexcept
     cin >> n >> m;
     for (int i = 0; i < n; ++i)cin >> arr[i];
     for (int i = 0; i < m; ++i)cin >> lines[i].first >> lines[i].second;
-    sort(arr, arr + n);
+    ranges::sort(arr, arr + n);
     for (int i = 0; i < m; ++i)
     {
         const auto [s, e] = lines[i];
-        const auto iter1 = lower_bound(arr, arr + n, s);
-        const auto iter2 = upper_bound(arr, arr + n, e);
+        const auto iter1 = ranges::lower_bound(arr, arr + n, s);
+        const auto iter2 = ranges::upper_bound(arr, arr + n, e);
         cout << iter2 - iter1 << '\n';
     }
 }

@@ -17,19 +17,47 @@ void Solve() noexcept
         int x; cin >> x;
         v.emplace_back(x);
     }
-    ranges::sort(v.begin(), v.end());
+    sort(v.begin(), v.end());
     ll ans = 0;
-    for (int i = 0; i < n; ++i)
+    for (int i = 0; i < n - 2; ++i)
     {
-        const auto a = v[i];
-        for (int j = i + 1; j < n; ++j)
+        int l = i + 1;
+        int r = n - 1;
+        const int target = -v[i];
+        while (l < r)
         {
-            const auto b = v[j];
-            const auto target = -(a + b);
-            const auto[iter,iter2]= ranges::equal_range(v.begin() + j + 1, v.end(), target);
-            if (v.end() != iter && *iter == target)
+            const int val = v[l] + v[r];
+            if (val < target)
             {
-                ans += (iter2 - iter);
+                ++l;
+            }
+            else if (val > target)
+            {
+                --r;
+            }
+            else
+            {
+                if (v[l] == v[r])
+                {
+                    ll cnt = r - l + 1;
+                    ans += cnt * (cnt - 1) / 2;
+                    break;
+                }
+                ll leftCnt = 1;
+                ll rightCnt = 1;
+                while (l + 1 < r && v[l] == v[l + 1])
+                {
+                    ++leftCnt;
+                    ++l;
+                }
+                while (r - 1 > l && v[r] == v[r - 1])
+                {
+                    ++rightCnt;
+                    --r;
+                }
+                ans += leftCnt * rightCnt;
+                ++l;
+                --r;
             }
         }
     }

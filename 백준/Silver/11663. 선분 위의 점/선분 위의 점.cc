@@ -8,23 +8,22 @@ using ull = unsigned long long;
 using pi = pair<int, int>;
 using pll = pair<ll, ll>;
 using pull = pair<ull, ull>;
-int arr[101];
-int n;
+int arr[100001];
+pi lines[100001];
+int n, m;
 void Solve() noexcept
 {
-    int n; cin >> n;
+    cin >> n >> m;
     for (int i = 0; i < n; ++i)cin >> arr[i];
-    int s = 0;
-    for (int i = n - 2; i >= 0; --i)
+    for (int i = 0; i < m; ++i)cin >> lines[i].first >> lines[i].second;
+    ranges::sort(arr, arr + n);
+    for (int i = 0; i < m; ++i)
     {
-        if (arr[i + 1] <= arr[i])
-        {
-            const auto delta = arr[i] - arr[i + 1];
-            s += delta + 1;
-            arr[i] -= (delta + 1);
-        }
+        const auto [s, e] = lines[i];
+        const auto iter1 = ranges::lower_bound(arr, arr + n, s);
+        const auto iter2 = ranges::upper_bound(arr, arr + n, e);
+        cout << iter2 - iter1 << '\n';
     }
-    cout << s;
 }
 int main()
 {

@@ -18,24 +18,26 @@ void Solve() noexcept
         v.emplace_back(a * 100 + b, c * 100 + d);
     }
     sort(v.begin(), v.end());
-    int end_time = 301;
-    int cnt = 0;
-    int idx = 0;
-    // 시작시간이 end_time 이하 중 가장 늦게 끝나는거 찾기
-    while (idx < v.size() && end_time < 1201)
+    int ans = 0;
+    int cur_end = 301;
+    for (;;)
     {
-        int cur_end = end_time;
-        while (idx < v.size() && v[idx].first <= end_time)
+        if (cur_end >= 1201)break;
+        const auto iter = upper_bound(v.begin(), v.end(), make_pair(cur_end, INF));
+        int max_end = -1;
+        for (auto it = v.begin(); it < iter; ++it)
         {
-            cur_end = max(cur_end, v[idx].second);
-            ++idx;
+            max_end = max(max_end, it->second);
         }
-        if (end_time == cur_end)break;
-        end_time = cur_end;
-        ++cnt;
+        if (cur_end == max_end ||max_end == -1)
+        {
+            cout << 0;
+            return;
+        }
+        ++ans;
+        cur_end = max_end;
     }
-    if (end_time < 1201)cout << 0;
-    else cout << cnt;
+    cout << ans;
 }
 int main()
 {

@@ -8,23 +8,27 @@ using ull = unsigned long long;
 using pi = pair<int, int>;
 using pll = pair<ll, ll>;
 using pull = pair<ull, ull>;
-int arr[101];
-int n;
+int memo[31];
+int GO(const int n)
+{
+	if (n == 0) return 1;
+	if (n == 1) return 0;
+	if (n == 2) return 3;
+	if (memo[n] != 0) return memo[n];
+	int result = 3 * GO(n - 2);
+	for (int i = 3; i <= n; i++) 
+	{
+		if (i % 2 == 0)
+		{
+			result += 2 * GO(n - i);
+		}	
+	}
+	return memo[n] = result;
+}
 void Solve() noexcept
 {
-    int n; cin >> n;
-    for (int i = 0; i < n; ++i)cin >> arr[i];
-    int s = 0;
-    for (int i = n - 2; i >= 0; --i)
-    {
-        if (arr[i + 1] <= arr[i])
-        {
-            const auto delta = arr[i] - arr[i + 1];
-            s += delta + 1;
-            arr[i] -= (delta + 1);
-        }
-    }
-    cout << s;
+	int n; cin >> n;
+	cout << GO(n);
 }
 int main()
 {

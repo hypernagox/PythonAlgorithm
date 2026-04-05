@@ -17,7 +17,7 @@ void Solve() noexcept
         int x; cin >> x;
         v.emplace_back(x);
     }
-    sort(v.begin(), v.end());
+    ranges::sort(v.begin(), v.end());
     ll ans = 0;
     for (int i = 0; i < n; ++i)
     {
@@ -26,8 +26,8 @@ void Solve() noexcept
         {
             const auto b = v[j];
             const auto target = -(a + b);
-            const auto iter = lower_bound(v.begin() + j + 1, v.end(), target);
-            const auto iter2 = upper_bound(v.begin() + j + 1, v.end(), target);
+            const auto iter = ranges::lower_bound(v.begin() + j + 1, v.end(), target);
+            const auto iter2 = ranges::upper_bound(v.begin() + j + 1, v.end(), target);
             if (v.end() != iter && *iter == target)
             {
                 ans += (iter2 - iter);

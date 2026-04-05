@@ -26,8 +26,7 @@ void Solve() noexcept
         {
             const auto b = v[j];
             const auto target = -(a + b);
-            const auto iter = ranges::lower_bound(v.begin() + j + 1, v.end(), target);
-            const auto iter2 = ranges::upper_bound(v.begin() + j + 1, v.end(), target);
+            const auto[iter,iter2]= ranges::equal_range(v.begin() + j + 1, v.end(), target);
             if (v.end() != iter && *iter == target)
             {
                 ans += (iter2 - iter);

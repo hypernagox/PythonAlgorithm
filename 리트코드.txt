@@ -1,0 +1,122 @@
+
+---
+
+## 섹션 1. 문자열 (String) — 9개
+
+1. **Longest Palindromic Substring** (LeetCode #5)
+2. **Valid Parentheses** (LeetCode #20)
+3. **Generate Parentheses** (LeetCode #22)
+4. **Permutations** (LeetCode #46)
+5. **Group Anagrams** (LeetCode #49)
+6. **Maximum Subarray** (LeetCode #53)
+7. **Valid Palindrome** (LeetCode #125)
+8. **Valid Anagram** (LeetCode #242)
+9. **Encode and Decode Strings** (LeetCode #271)
+
+---
+
+## 섹션 2. 배열 (Array) — 16개
+
+10. **Two Sum** (LeetCode #1)
+11. **Container With Most Water** (LeetCode #11)
+12. **3Sum** (LeetCode #15)
+13. **Next Permutation** (LeetCode #31)
+14. **Search in Rotated Sorted Array** (LeetCode #33)
+15. **First Missing Positive** (LeetCode #41)
+16. **Best Time to Buy and Sell Stock** (LeetCode #121)
+17. **Maximum Product Subarray** (LeetCode #152)
+18. **Find Minimum in Rotated Sorted Array** (LeetCode #153)
+19. **Two Sum II - Input Array Is Sorted** (LeetCode #167)
+20. **Count Primes** (LeetCode #204)
+21. **Kth Largest Element in an Array** (LeetCode #215)
+22. **Contains Duplicate** (LeetCode #217)
+23. **Product of Array Except Self** (LeetCode #238)
+24. **Move Zeroes** (LeetCode #283)
+25. **Binary Search** (LeetCode #704)
+
+---
+
+## 섹션 3. 행렬 (Matrix) — 5개
+
+26. **Rotate Image** (LeetCode #48)
+27. **Spiral Matrix** (LeetCode #54)
+28. **Set Matrix Zeroes** (LeetCode #73)
+29. **Word Search** (LeetCode #79)
+30. **01 Matrix** (LeetCode #542)
+
+---
+
+## 섹션 4. 링크드 리스트 (Linked List) — 4개
+
+31. **Add Two Numbers** (LeetCode #2)
+32. **Merge Two Sorted Lists** (LeetCode #21)
+33. **Linked List Cycle** (LeetCode #141)
+34. **Reverse Linked List** (LeetCode #206)
+
+---
+
+## 섹션 5. 구간 (Interval) — 4개
+
+35. **Merge Intervals** (LeetCode #56)
+36. **Meeting Rooms** (LeetCode #252)
+37. **Meeting Rooms II** (LeetCode #253)
+38. **Non-overlapping Intervals** (LeetCode #435)
+
+---
+
+## 섹션 6. 동적프로그래밍 (DP) — 10개
+
+39. **Longest Substring Without Repeating Characters** (LeetCode #3)
+40. **Remove Nth Node From End of List** (LeetCode #19)
+41. **Combination Sum** (LeetCode #39)
+42. **Unique Paths** (LeetCode #62)
+43. **Climbing Stairs** (LeetCode #70)
+44. **Decode Ways** (LeetCode #91)
+45. **Word Break** (LeetCode #139)
+46. **House Robber** (LeetCode #198)
+47. **Coin Change** (LeetCode #322)
+48. **Longest Common Subsequence** (LeetCode #1143)
+
+---
+
+## 섹션 7. 트리 (Tree) — 10개
+
+49. **Validate Binary Search Tree** (LeetCode #98)
+50. **Same Tree** (LeetCode #100)
+51. **Binary Tree Level Order Traversal** (LeetCode #102)
+52. **Maximum Depth of Binary Tree** (LeetCode #104)
+53. **Implement Trie (Prefix Tree)** (LeetCode #208)
+54. **Invert Binary Tree** (LeetCode #226)
+55. **Lowest Common Ancestor of a Binary Search Tree** (LeetCode #235)
+56. **Lowest Common Ancestor of a Binary Tree** (LeetCode #236)
+57. **Graph Valid Tree** (LeetCode #261)
+58. **Subtree of Another Tree** (LeetCode #572)
+
+---
+
+## 섹션 8. 그래프 (Graph) — 6개
+
+59. **Clone Graph** (LeetCode #133)
+60. **Longest Consecutive Sequence** (LeetCode #128)
+61. **Number of Islands** (LeetCode #200)
+62. **Course Schedule** (LeetCode #207)
+63. **Design Add and Search Words Data Structure** (LeetCode #211)
+64. **Number of Connected Components in an Undirected Graph** (LeetCode #323)
+
+---
+
+## 섹션 9. 힙 (Heap) — 2개
+
+65. **Merge k Sorted Lists** (LeetCode #23)
+66. **Top K Frequent Elements** (LeetCode #347)
+
+---
+
+## 섹션 10. 비트 조작 (Bit Manipulation) — 4개
+
+67. **Reverse Bits** (LeetCode #190)
+68. **Number of 1 Bits** (LeetCode #191)
+69. **Missing Number** (LeetCode #268)
+70. **Counting Bits** (LeetCode #338)
+
+---

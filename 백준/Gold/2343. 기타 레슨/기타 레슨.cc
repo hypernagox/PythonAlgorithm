@@ -1,51 +1,56 @@
 #include <bits/stdc++.h>
 using namespace std;
-constexpr const int INF = 987654321;
+void FastIO()noexcept { ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL); }
+constexpr const int INF = static_cast<int>(1e9) + 1;
+constexpr const int MIN_INF = -INF;
 using ll = long long;
 using ull = unsigned long long;
 using pi = pair<int, int>;
 using pll = pair<ll, ll>;
 using pull = pair<ull, ull>;
-int arr[100001];
-int n, m;
-bool Check(const long long mid)
+ull arr[100001];
+ull n, m;
+bool Check(const ull mid)
 {
-    long long sum = 0;
-    long long cnt = 1;
+    ull cnt = 1;
+    ull s = 0;
     for (int i = 0; i < n; ++i)
     {
         if (arr[i] > mid)return false;
-        const auto next_sum = sum + (long long)arr[i];
-        if (next_sum > mid)
+        if (s + arr[i] > mid)
         {
+            s = 0;
             ++cnt;
-            sum = arr[i];
+            if (cnt > m)return false;
         }
-        else
-        {
-            sum = next_sum;
-        }
+        s += arr[i];
     }
     return cnt <= m;
 }
-int main()
+void Solve() noexcept
 {
-    ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
     cin >> n >> m;
     for (int i = 0; i < n; ++i)cin >> arr[i];
-    long long l = 0;
-    long long r = 1LL << 62;
-    while (l < r)
+    ull low = 1;
+    ull high = INT32_MAX / 2;
+    ull ans = 1;
+    while (low < high)
     {
-        const auto mid = (l + r) / 2LL;
+        const auto mid = low + (high - low) / 2ULL;
         if (Check(mid))
         {
-            r = mid;
+            ans = mid;
+            high = mid;
         }
         else
         {
-            l = mid + 1;
+            low = mid + 1;
         }
     }
-    cout << l;
+    cout << ans;
+}
+int main()
+{
+    FastIO();
+    Solve();
 }

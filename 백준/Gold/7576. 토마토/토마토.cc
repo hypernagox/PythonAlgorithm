@@ -12,47 +12,10 @@ int n, m;
 int board[1001][1001];
 constexpr const int dy[]{ -1,0,1,0 };
 constexpr const int dx[]{ 0,1,0,-1 };
-bool IsFinish()
-{
-    for (int i = 0; i < n; ++i)
-    {
-        for (int j = 0; j < m; ++j)
-        {
-            if (board[i][j] == 0)return false;
-        }
-    }
-    return true;
-}
-vector<pi> targets;
-vector<pi> v;
-bool visited[1001][1001];
-bool GO()
-{
-    for (const auto [i, j] : targets)
-    {
-        for (int k = 0; k < 4; ++k)
-        {
-            const auto ny = i + dy[k];
-            const auto nx = j + dx[k];
-            if (ny < 0 || nx < 0 || ny >= n || nx >= m)continue;
-            if (board[ny][nx] != 0)continue;
-            if (visited[ny][nx])continue;
-            visited[ny][nx] = 1;
-            v.emplace_back(ny, nx);
-        }
-    }
-    for (const auto [y, x] : v)
-    {
-        board[y][x] = 1;
-    }
-    targets.swap(v);
-    v.clear();
-    return targets.empty();
-}
 void Solve() noexcept
 {
     cin >> m >> n;
-    targets.reserve(m * n); v.reserve(m * n);
+    queue<pi> q;
     for (int i = 0; i < n; ++i)
     {
         for (int j = 0; j < m; ++j)
@@ -60,22 +23,38 @@ void Solve() noexcept
             cin >> board[i][j];
             if (board[i][j] == 1)
             {
-                visited[i][j] = 1;
-                targets.emplace_back(i, j);
+                q.emplace(i, j);
             }
         }
     }
-    int cnt = 0;
-    while (!IsFinish())
+    int ans = 0;
+    while (q.size())
     {
-        if (GO())
+        const auto [y, x] = q.front();
+        q.pop();
+        ans = max(ans, board[y][x]);
+        for (int i = 0; i < 4; ++i)
         {
-            cnt = -1;
-            break;
+            const auto ny = y + dy[i];
+            const auto nx = x + dx[i];
+            if (ny < 0 || nx < 0 || ny >= n || nx >= m)continue;
+            if (board[ny][nx] != 0)continue;
+            board[ny][nx] = board[y][x] + 1;
+            q.emplace(ny, nx);
         }
-        ++cnt;
     }
-    cout << cnt;
+    for (int i = 0; i < n; ++i)
+    {
+        for (int j = 0; j < m; ++j)
+        {
+            if (board[i][j] == 0)
+            {
+                cout << -1;
+                return;
+            }
+        }
+    }
+    cout << ans - 1;
 }
 int main()
 {

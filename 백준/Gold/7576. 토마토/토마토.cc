@@ -24,10 +24,10 @@ bool IsFinish()
     return true;
 }
 vector<pi> targets;
+vector<pi> v;
 bool visited[1001][1001];
 bool GO()
 {
-    vector<pi> v;
     for (const auto [i, j] : targets)
     {
         for (int k = 0; k < 4; ++k)
@@ -46,11 +46,13 @@ bool GO()
         board[y][x] = 1;
     }
     targets.swap(v);
+    v.clear();
     return targets.empty();
 }
 void Solve() noexcept
 {
     cin >> m >> n;
+    targets.reserve(m * n); v.reserve(m * n);
     for (int i = 0; i < n; ++i)
     {
         for (int j = 0; j < m; ++j)
@@ -58,6 +60,7 @@ void Solve() noexcept
             cin >> board[i][j];
             if (board[i][j] == 1)
             {
+                visited[i][j] = 1;
                 targets.emplace_back(i, j);
             }
         }

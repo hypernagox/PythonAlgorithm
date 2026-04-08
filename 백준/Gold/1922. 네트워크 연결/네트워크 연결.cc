@@ -8,48 +8,36 @@ using ull = unsigned long long;
 using pi = pair<int, int>;
 using pll = pair<ll, ll>;
 using pull = pair<ull, ull>;
-struct Edge
-{
-    int from;
-    int to;
-    int cost;
-    const auto operator<(const Edge& e)const {
-        return cost < e.cost;
-    }
-};
-vector<int> parents;
-int FindParent(const int cur)
-{
-    auto& parent = parents[cur];
-    return parent = parent == cur ? cur : FindParent(parent);
-}
-bool Union(int a, int b)
-{
-    a = FindParent(a);
-    b = FindParent(b);
-    if (a == b)return false;
-    if (a > b)swap(a, b);
-    parents[b] = a;
-    return true;
-}
+bool visited[1001];
+int dists[1001];
+vector<pi> adj[1001];
 void Solve() noexcept
 {
     int n, m; cin >> n >> m;
-    parents.resize(n + 1);
-    iota(parents.begin(), parents.end(), 0);
-    vector<Edge> edges; edges.reserve(m);
     while (m--)
     {
         int a, b, c; cin >> a >> b >> c;
-        edges.emplace_back(a, b, c);
+        adj[a].emplace_back(c, b);
+        adj[b].emplace_back(c, a);
     }
-    sort(edges.begin(), edges.end());
+    priority_queue<pi, vector<pi>, greater<pi>> pq;
+    fill(dists, dists + sizeof(dists) / 4, INF);
+    pq.emplace(0, 1);
+    dists[1] = 0;
     ll ans = 0;
-    for (const auto [from, to, cost] : edges)
+    while (pq.size())
     {
-        if (Union(from, to))
+        const auto [cost, cur] = pq.top();
+        pq.pop();
+        if (visited[cur])continue;
+        visited[cur] = 1;
+        ans += cost;
+        for (const auto [c, next] : adj[cur])
         {
-            ans += cost;
+            if (visited[next])continue;
+            if (dists[next] <= c)continue;
+            dists[next] = c;
+            pq.emplace(c, next);
         }
     }
     cout << ans;

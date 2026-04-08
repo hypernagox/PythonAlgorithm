@@ -8,40 +8,48 @@ using ull = unsigned long long;
 using pi = pair<int, int>;
 using pll = pair<ll, ll>;
 using pull = pair<ull, ull>;
-void Solve()noexcept
+queue<int> q[101];
+void Solve() noexcept
 {
-    int n, k; cin >> n >> k;
-    int s[101];
-    map<int, queue<int>> m;
-    for (int i = 0; i < k; ++i)
+    int n, m; cin >> n >> m;
+    int arr[100];
+    for (int i = 0; i < m; ++i)
     {
-        int a; cin >> a;
-        m[a].emplace(i);
-        s[i] = a;
+        int x; cin >> x;
+        arr[i] = x;
+        q[x].emplace(i);
     }
-    for (auto& [num, q] : m)
+    for (int i = 1; i <= m; ++i)
     {
-        q.emplace(INF + num);
+        q[i].emplace(INF);
     }
-    map<int, int> sceduler; // 일 / 다음인덱스 
-    map<int, int> pq;
-    int res = 0;
-    for (int i = 0; i < k; ++i)
+    int cnt = 0;
+    set<pi> s;
+    set<int> cur;
+    for (int i = 0; i < m; ++i)
     {
-        if (!sceduler.count(s[i]) && sceduler.size() == n)
+        const auto val = arr[i];
+        q[val].pop();
+        const auto next = q[val].front();
+        if (cur.count(val))
         {
-            ++res;
-            const auto victim = pq.begin()->second;
-            sceduler.erase(victim);
-            pq.erase(pq.begin());
+            s.erase(s.begin());
+            s.emplace(next, val);
         }
-        m[s[i]].pop();
-        const auto next_idx = m[s[i]].front();
-        pq.erase(-i);
-        sceduler[s[i]] = next_idx;
-        pq.emplace(-next_idx, s[i]);
+        else
+        {
+            if (s.size() >= n)
+            {
+                const auto [idx, val] = *--s.end();
+                cur.erase(val);
+                s.erase(--s.end());
+                ++cnt;
+            }
+            s.emplace(next, val);
+            cur.emplace(val);       
+        }
     }
-    cout << res;
+    cout << cnt;
 }
 int main()
 {

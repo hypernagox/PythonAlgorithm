@@ -8,54 +8,31 @@ using ull = unsigned long long;
 using pi = pair<int, int>;
 using pll = pair<ll, ll>;
 using pull = pair<ull, ull>;
+ll arr[51];
+int n;
+ll memo[51];
+int GO(const int idx)
+{
+    if (n == idx)return 0;
+    auto& ref = memo[idx];
+    if (~ref)return ref;
+    int a = -INF;
+    // 묶기
+    if (idx + 1 < n)
+    {
+        a = GO(idx + 2) + (arr[idx] * arr[idx + 1]);
+    }
+    // 안묶기
+    const int b = GO(idx + 1) + arr[idx];
+    return ref = max(a, b);
+}
 void Solve() noexcept
 {
-    priority_queue<ll> pq1, pq2;
-    int n; cin >> n;
-    for (int i = 0; i < n; ++i)
-    {
-        ll x; cin >> x;
-        if (x <= 0)
-        {
-            pq1.emplace(-x);
-        }
-        else
-        {
-            pq2.emplace(x);
-        }
-    }
-    ll res = 0;
-    while (pq1.size())
-    {
-        const auto a = pq1.top();
-        pq1.pop();
-        if (pq1.size())
-        {
-            const auto b = pq1.top();
-            pq1.pop();
-            res += a * b;
-        }
-        else
-        {
-            res -= a;
-        }
-    }
-    while (pq2.size())
-    {
-        const auto a = pq2.top();
-        pq2.pop();
-        if (pq2.size() && a != 1 && pq2.top() != 1)
-        {
-            const auto b = pq2.top();
-            pq2.pop();
-            res += a * b;
-        }
-        else
-        {
-            res += a;
-        }
-    }
-    cout << res;
+    cin >> n;
+    for (int i = 0; i < n; ++i)cin >> arr[i];
+    sort(arr, arr + n);
+    memset(memo, -1, sizeof(memo));
+    cout << GO(0);
 }
 int main()
 {

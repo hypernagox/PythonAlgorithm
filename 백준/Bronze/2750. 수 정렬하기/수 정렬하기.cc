@@ -175,16 +175,19 @@ void Sort(vector<int>& arr, const int left, const int right)
     //QuickSort(arr, left, right);
    // MergeSort(arr, left, right);
 
-    //Heap h;
-    //for (int i = 0; i < arr.size(); ++i)
-    //{
-    //    h.Add(arr[i]);
-    //}
-    //for (int i = 0; i < arr.size(); ++i)
-    //{
-    //    cout << h.Pop() << '\n';
-    //}
-    HeapSort(arr);
+    Heap h;
+    for (int i = 0; i < arr.size(); ++i)
+    {
+        h.Add(arr[i]);
+    }
+    vector<int> temp;
+    for (int i = 0; i < arr.size(); ++i)
+    {
+        temp.emplace_back(h.Pop());
+    }
+    reverse(temp.begin(), temp.end());
+    temp.swap(arr);
+    //HeapSort(arr);
 }
 void Solve() noexcept
 {

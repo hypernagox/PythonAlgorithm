@@ -10,18 +10,19 @@ using pll = pair<ll, ll>;
 using pull = pair<ull, ull>;
 int Partition(vector<int>& arr, const int left, const int right)
 {
-    const int pivot = arr[right];
-    int i = left - 1;
-    for (int j = left; j < right; ++j)
+    const auto pivot = arr[left];
+    int l = left + 1;
+    int r = right;
+    while (l <= r)
     {
-        if (arr[j] < pivot)
-        {
-            ++i;
-            swap(arr[i], arr[j]);
-        }
+        while (l <= right && arr[l] < pivot) { ++l; }
+        while (r >= left + 1 && arr[r] > pivot) { --r; }
+        if (l >= r)break;
+        swap(arr[l], arr[r]);
+        ++l; --r;
     }
-    swap(arr[i + 1], arr[right]);
-    return i + 1;
+    swap(arr[r], arr[left]);
+    return r;
 }
 void QuickSort(vector<int>& arr, const int left, const int right)
 {

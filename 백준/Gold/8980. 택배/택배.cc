@@ -12,32 +12,35 @@ struct Data
 {
     int from;
     int to;
-    int amount;
+    int cap;
     const auto operator<(const Data& d)const {
-        if (to == d.to)return from < d.from;
         return to < d.to;
     }
 };
-Data items[10001];
-int capacities[2001];
 void Solve() noexcept
 {
-    int n, c, m; cin >> n >> c >> m;
-    fill(capacities, capacities + n, c);
-    for (int i = 0; i < m; ++i)
+    int n, c, k; cin >> n >> c >> k;
+    vector<Data> items; items.reserve(k);
+    vector<int> capitices(n, c); // i번 마을에서의 남은 용량
+    for (int i = 0; i < k; ++i)
     {
         int a, b, c; cin >> a >> b >> c;
-        items[i] = Data{ a - 1,b - 1,c };
+        items.emplace_back(a - 1, b - 1, c);
     }
-    sort(items, items + m);
+    sort(items.begin(), items.end());
     int ans = 0;
-    for (int i = 0; i < m; ++i)
+    for (const auto [from, to, cap] : items)
     {
-        const auto [from, to, amount] = items[i];
-        const auto remain_cap = *min_element(capacities + from, capacities + to);
-        const auto delta = min(amount, remain_cap);
-        ans += delta;
-        for (int j = from; j < to; ++j)capacities[j] -= delta;
+        int can_keep = min(c, cap);
+        for (int i = from; i < to; ++i)
+        {
+            can_keep = min(can_keep, capitices[i]);
+        }
+        ans += can_keep;
+        for (int i = from; i < to; ++i)
+        {
+            capitices[i] -= can_keep;
+        }
     }
     cout << ans;
 }

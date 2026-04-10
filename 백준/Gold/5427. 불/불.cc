@@ -11,6 +11,7 @@ using pull = pair<ull, ull>;
 constexpr const int dy[]{ -1,0,1,0 };
 constexpr const int dx[]{ 0,1,0,-1 };
 int visited[1001][1001];
+bool fire[1001][1001];
 char board[1001][1001];
 int c, r;
 vector<pi> fire_place;
@@ -19,7 +20,7 @@ bool CanGo(const int y, const int x)
     if (y < 0 || x < 0 || y >= r || x >= c)return false;
     return true;
 }
-set<pi> s;
+vector<pi> s;
 void Fire()
 {
     for (const auto [i, j] : fire_place)
@@ -30,7 +31,9 @@ void Fire()
             const auto nx = j + dx[k];
             if (CanGo(ny, nx) == false)continue;
             if (board[ny][nx] != '.')continue;
-            s.emplace(ny, nx);
+            if (fire[ny][nx])continue;
+            fire[ny][nx] = 1;
+            s.emplace_back(ny, nx);
         }
     }
     fire_place.clear();
@@ -40,7 +43,6 @@ void Fire()
         fire_place.emplace_back(i, j);
     }
     s.clear();
-   // temp.swap(fire_place);
 }
 struct Data
 {
@@ -53,12 +55,15 @@ void Solve() noexcept
     int t; cin >> t;
     pi start{};
     queue<Data> q;
+    fire_place.reserve(1024);
+    s.reserve(1024);
     while (t--)
     {
         cin >> c >> r;
         while (q.size())q.pop();
         fire_place.clear();
         memset(visited, 0, sizeof(visited));
+        memset(fire, 0, sizeof(fire));
         for (int i = 0; i < r; ++i)
         {
             for (int j = 0; j < c; ++j)
@@ -72,6 +77,7 @@ void Solve() noexcept
                 else if (board[i][j] == '*')
                 {
                     fire_place.emplace_back(i, j);
+                    fire[i][j] = 1;
                 }
             }
         }

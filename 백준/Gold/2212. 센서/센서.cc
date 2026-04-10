@@ -11,23 +11,22 @@ using pull = pair<ull, ull>;
 void Solve() noexcept
 {
     int n, k; cin >> n >> k;
-    vector<int> v;
+    vector<int> v1, v2;
     for (int i = 0; i < n; ++i)
     {
         int x; cin >> x;
-        v.emplace_back(x);
+        v1.emplace_back(x);
     }
-    sort(v.begin(), v.end());
-    vector<int> diff;
+    sort(v1.begin(), v1.end());
     for (int i = 0; i < n - 1; ++i)
     {
-        diff.emplace_back(v[i + 1] - v[i]);
+        v2.emplace_back(v1[i + 1] - v1[i]);
     }
-    sort(diff.begin(), diff.end());
+    sort(v2.begin(), v2.end());
     int ans = 0;
-    for (int i = 0; i < (int)diff.size() - (k - 1); ++i)
+    for (int i = 0; i < (int)v2.size() - (k - 1); ++i)
     {
-        ans += diff[i];
+        ans += v2[i];
     }
     cout << ans;
 }

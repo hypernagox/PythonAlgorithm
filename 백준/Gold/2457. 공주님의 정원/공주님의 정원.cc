@@ -11,33 +11,39 @@ using pull = pair<ull, ull>;
 void Solve() noexcept
 {
     int n; cin >> n;
-    vector<pi> v; v.reserve(n);
+    vector<pi> v;
     for (int i = 0; i < n; ++i)
     {
         int a, b, c, d; cin >> a >> b >> c >> d;
         v.emplace_back(a * 100 + b, c * 100 + d);
     }
     sort(v.begin(), v.end());
-    int ans = 0;
-    int cur_end = 301;
-    for (;;)
+    int cnt = 0;
+    int cur_start = 301;
+    int max_end = 0;
+    for (int i = 0; i < n; ++i)
     {
-        if (cur_end >= 1201)break;
-        const auto iter = upper_bound(v.begin(), v.end(), make_pair(cur_end, INF));
-        int max_end = -1;
-        for (auto it = v.begin(); it < iter; ++it)
+        const auto [start, end] = v[i];
+        if (start <= cur_start)
         {
-            max_end = max(max_end, it->second);
+            max_end = max(max_end, end);
         }
-        if (cur_end == max_end ||max_end == -1)
+        else
         {
-            cout << 0;
+            --i;
+            if (cur_start == max_end)break;
+            cur_start = max_end;
+            ++cnt;
+        }
+        if (max_end >= 1201)
+        {
+            ++cnt;
+            cout << cnt;
             return;
+            break;
         }
-        ++ans;
-        cur_end = max_end;
     }
-    cout << ans;
+    cout << 0;
 }
 int main()
 {

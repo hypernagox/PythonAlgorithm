@@ -13,8 +13,8 @@ void Solve() noexcept
 {
     int n; cin >> n;
     for (int i = 0; i < n; ++i)cin >> arr[i];
-    const auto [m, M] = ranges::minmax_element(arr, arr + n);
-    cout << *m << ' ' << *M;
+    ranges::sort(arr, arr + n);
+    cout << arr[0] << ' ' << arr[n - 1];
 }
 int main()
 {

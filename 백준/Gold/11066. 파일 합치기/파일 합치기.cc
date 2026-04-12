@@ -1,44 +1,54 @@
 #include <bits/stdc++.h>
 using namespace std;
+void FastIO()noexcept { ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL); }
+constexpr const int INF = static_cast<int>(1e9) + 1;
+constexpr const int MIN_INF = -INF;
 using ll = long long;
+using ull = unsigned long long;
 using pi = pair<int, int>;
 using pll = pair<ll, ll>;
-constexpr const int INF = 987654321;
-int T;
-int arr[501];
-int psum[501];
+using pull = pair<ull, ull>;
+int files[501];
+int n;
+int acc[501];
 int memo[501][501];
-int S(const int l, const int r)
+int GetAcc(const int l, const int r)
 {
-	return psum[r + 1] - psum[l];
+    return acc[r] - acc[l] + files[l];
 }
 int GO(const int l, const int r)
 {
-	if (l >= r)return 0;
-	auto& ref = memo[l][r];
-	if (-1 != ref)return ref;
-	int res = INF;
-	for (int k = l; k < r; ++k)
-	{
-		const auto a = GO(l, k);
-		const auto b = GO(k + 1, r);
-		res = min(res, (a + b) + S(l, r));
-	}
-	return ref = res;
+    if (l >= r)return 0;
+    auto& ref = memo[l][r];
+    if (~ref)return ref;
+    int min_v = INF;
+    const auto v = GetAcc(l, r);
+    for (int k = l; k < r; ++k)
+    {
+        min_v = min(min_v, v + GO(l, k) +
+            GO(k + 1, r));
+    }
+    return ref = min_v;
+}
+void Solve() noexcept
+{
+    int t; cin >> t;
+    while (t--)
+    {
+        cin >> n;
+        int k = 0;
+        for (int i = 0; i < n; ++i) 
+        {
+            cin >> files[i];
+            k += files[i];
+            acc[i] = k;
+        }
+        memset(memo, -1, sizeof(memo));
+        cout << GO(0, n - 1) << '\n';
+    }
 }
 int main()
 {
-	ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
-	cin >> T;
-	while (T--)
-	{
-		int n; cin >> n;
-		memset(memo, -1, sizeof(memo));
-		for (int i = 0; i < n; ++i) 
-		{
-			cin >> arr[i];
-			psum[i + 1] = arr[i] + psum[i];
-		}
-		cout << GO(0, n - 1) << '\n';
-	}
+    FastIO();
+    Solve();
 }

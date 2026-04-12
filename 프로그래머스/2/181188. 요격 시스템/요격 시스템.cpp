@@ -1,24 +1,23 @@
 #include <bits/stdc++.h>
 using namespace std;
-
+using pi = pair<int,int>;
 int solution(vector<vector<int>> targets)
 {
-    vector<pair<int,int>> missles;
-    missles.reserve(targets.size());
-    for(const auto& v : targets)
+    vector<pi> v;
+    for(const auto& e: targets)
     {
-        missles.emplace_back(v[1],v[0]);
+        v.emplace_back(e[1], e[0]);
     }
-    sort(missles.begin(),missles.end());
-    int cur_idx = 0;
-    int ans = 1;
-    for(int i=1;i<missles.size();++i)
+    sort(v.begin(),v.end());
+    int cur_end = v[0].second;
+    int ans = 0;
+    for(const auto [end, start] : v)
     {
-        if(missles[cur_idx].first <= missles[i].second)
-        {
-            ++ans;
-            cur_idx = i;
-        }
+       if(cur_end <= start)
+       {
+           ++ans;
+           cur_end = end;
+       }
     }
     return ans;
 }

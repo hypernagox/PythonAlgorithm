@@ -9,8 +9,7 @@ using pi = pair<int, int>;
 using pll = pair<ll, ll>;
 using pull = pair<ull, ull>;
 short n, m;
-short arr[5000];
-bool Check(const short mid)
+bool Check(short arr[], const short mid)
 {
     short cur_min = arr[0];
     short cur_max = arr[0];
@@ -30,6 +29,7 @@ bool Check(const short mid)
 }
 void Solve() noexcept
 {
+    short arr[5000];
     cin >> n >> m;
     for (int i = 0; i < n; ++i)cin >> arr[i];
     short low = 0;
@@ -38,7 +38,7 @@ void Solve() noexcept
     while (low < high)
     {
         const auto mid = low + (high - low) / 2;
-        if (Check(mid))
+        if (Check(arr, mid))
         {
             ans = mid;
             high = mid;

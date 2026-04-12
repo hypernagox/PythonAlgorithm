@@ -10,25 +10,32 @@ using pll = pair<ll, ll>;
 using pull = pair<ull, ull>;
 int arr[1001];
 int n;
-int memo[1002][1002];
-int GO(const int prev_idx, const int cur_idx)
+int memo[1001];
+int GO(const int last_idx)
 {
-    if (cur_idx == n)return 0;
-    auto& ref = memo[prev_idx + 1][cur_idx];
+    auto& ref = memo[last_idx];
     if (~ref)return ref;
-    int a = 0;
-    if (prev_idx == -1 || arr[prev_idx] < arr[cur_idx])
+    int res = 0;
+    for (int i = 0; i < last_idx; ++i)
     {
-        a = GO(cur_idx, cur_idx + 1) + 1;
+        if (arr[i] < arr[last_idx])
+        {
+            res = max(res, GO(i));
+        }
     }
-    return ref = max(a, GO(prev_idx, cur_idx + 1));
+    return ref = res + 1;
 }
 void Solve() noexcept
 {
     cin >> n;
     for (int i = 0; i < n; ++i)cin >> arr[i];
     memset(memo, -1, sizeof(memo));
-    cout << GO(-1, 0);
+    int ans = 0;
+    for (int i = 0; i < n; ++i)
+    {
+        ans = max(ans, GO(i));
+    }
+    cout << ans;
 }
 int main()
 {

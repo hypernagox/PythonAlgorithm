@@ -20,7 +20,7 @@ int GO(const int l, const int r)
 {
     if (l >= r)return 0;
     auto& ref = memo[l][r];
-    if (~ref)return ref;
+    if (ref)return ref;
     int min_v = INF;
     const auto v = GetAcc(l, r);
     for (int k = l; k < r; ++k)
@@ -43,7 +43,7 @@ void Solve() noexcept
             k += files[i];
             acc[i] = k;
         }
-        memset(memo, -1, sizeof(memo));
+        memset(memo, 0, sizeof(memo));
         cout << GO(0, n - 1) << '\n';
     }
 }

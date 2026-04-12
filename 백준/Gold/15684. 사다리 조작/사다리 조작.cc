@@ -60,6 +60,8 @@ void GO(const int cnt, const int lim)
         if (flag)
         {
             ans = min(ans, cnt);
+            cout << ans;
+            exit(0);
         }
         return;
     }

@@ -60,8 +60,6 @@ void GO(const int cnt, const int lim)
         if (flag)
         {
             ans = min(ans, cnt);
-            cout << ans;
-            exit(0);
         }
         return;
     }
@@ -69,6 +67,7 @@ void GO(const int cnt, const int lim)
     {
         for (int i = 0; i < n - 1; ++i)
         {
+            if (i != 0 && (edges[y][i - 1] || edges[y][i] || edges[y][i + 1]))continue;
             if (edges[y][i] || edges[y][i + 1])continue;
             edges[y][i] = 1;
             GO(cnt + 1, lim);

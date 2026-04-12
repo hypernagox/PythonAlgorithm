@@ -8,13 +8,13 @@ using ull = unsigned long long;
 using pi = pair<int, int>;
 using pll = pair<ll, ll>;
 using pull = pair<ull, ull>;
-int n, m;
-int arr[5001];
-bool Check(const ll mid)
+short n, m;
+short arr[5000];
+bool Check(const short mid)
 {
-    int cur_min = arr[0];
-    int cur_max = arr[0];
-    int cnt = 1;
+    short cur_min = arr[0];
+    short cur_max = arr[0];
+    short cnt = 1;
     for (int i = 0; i < n; ++i)
     {
         cur_min = min(cur_min, arr[i]);
@@ -32,12 +32,12 @@ void Solve() noexcept
 {
     cin >> n >> m;
     for (int i = 0; i < n; ++i)cin >> arr[i];
-    ll low = 0;
-    ll high = 10002;
-    ll ans = low;
+    short low = 0;
+    short high = 10002;
+    short ans = low;
     while (low < high)
     {
-        const auto mid = low + (high - low) / 2LL;
+        const auto mid = low + (high - low) / 2;
         if (Check(mid))
         {
             ans = mid;

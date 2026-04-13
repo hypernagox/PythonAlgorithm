@@ -19,14 +19,11 @@ map<char, int> dir
     {'D',2},
     {'L',3},
 };
-int memo[51][51][4];
 bool visited[51][51][4];
 int GO(const int y, const int x, const int state)
 {
     if (y < 0 || x < 0 || y >= r || x >= c)return 0;
     if (y == r - 1 && x == c - 1)return 1;
-    auto& ref = memo[y][x][state];
-    if (~ref)return ref;
     if (visited[y][x][state])return 0;
     visited[y][x][state] = 1;
     const auto d = dir[board[y][x]];
@@ -46,7 +43,7 @@ int GO(const int y, const int x, const int state)
         res |= GO(y + dy[d2], x + dx[d2], state & ~(1 << 1));
     }
     res |= GO(ny, nx, state);
-    return ref = res;   
+    return res;   
 }
 void Solve() noexcept
 {
@@ -58,7 +55,6 @@ void Solve() noexcept
             cin >> board[i][j];
         }
     }
-    memset(memo, -1, sizeof(memo));
     if (k == 1)k = 3;
     if (GO(0, 0, k))
     {

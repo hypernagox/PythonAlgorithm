@@ -19,30 +19,30 @@ map<char, int> dir
     {'D',2},
     {'L',3},
 };
-bool visited[51][51][4];
-int GO(const int y, const int x, const int state)
+bool visited[51][51][2][2];
+int GO(const int y, const int x, const int a, const int b)
 {
     if (y < 0 || x < 0 || y >= r || x >= c)return 0;
     if (y == r - 1 && x == c - 1)return 1;
-    if (visited[y][x][state])return 0;
-    visited[y][x][state] = 1;
+    if (visited[y][x][a][b])return 0;
+    visited[y][x][a][b] = 1;
     const auto d = dir[board[y][x]];
     const auto ny = y + dy[d];
     const auto nx = x + dx[d];
     bool res = false;
-    if ((state & (1 << 0)))
+    if (a)
     {
         // r 주문서
         const auto d2 = (d + 1) % 4;
-        res |= GO(y + dy[d2], x + dx[d2], state & ~(1 << 0));
+        res |= GO(y + dy[d2], x + dx[d2], a - 1, b);
     }
-    if ((state & (1 << 1)))
+    if (b)
     {
         // l 주문서
         const auto d2 = (d - 1 + 4) % 4;
-        res |= GO(y + dy[d2], x + dx[d2], state & ~(1 << 1));
+        res |= GO(y + dy[d2], x + dx[d2], a, b - 1);
     }
-    res |= GO(ny, nx, state);
+    res |= GO(ny, nx, a, b);
     return res;   
 }
 void Solve() noexcept
@@ -55,8 +55,7 @@ void Solve() noexcept
             cin >> board[i][j];
         }
     }
-    if (k == 1)k = 3;
-    if (GO(0, 0, k))
+    if (GO(0, 0, k, k))
     {
         cout << "Yes";
     }

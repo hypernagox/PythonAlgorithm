@@ -21,7 +21,7 @@ void Solve() noexcept
             ++cnt;
             target.pop_back();
         }
-        target += num[i];
+        target.push_back(num[i]);
     }
     while (cnt != k)
     {

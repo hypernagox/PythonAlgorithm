@@ -8,19 +8,16 @@ using ull = unsigned long long;
 using pi = pair<int, int>;
 using pll = pair<ll, ll>;
 using pull = pair<ull, ull>;
-int acc[1001];
 void Solve() noexcept
 {
     int n; cin >> n;
     vector<int> v; v.reserve(n);
-    int s = 0;
     for (int i = 0; i < n; ++i)
     {
         int x; cin >> x;
         v.emplace_back(x);
     }
     sort(v.begin(), v.end());
-    // 1 1 2 3 6 7 30
     int cur = 0;
     for (int i = 0; i < n; ++i)
     {

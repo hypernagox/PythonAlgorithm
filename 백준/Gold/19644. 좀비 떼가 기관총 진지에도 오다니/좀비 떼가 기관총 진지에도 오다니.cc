@@ -14,36 +14,30 @@ void Solve() noexcept
     vector<ll> zombies; zombies.reserve(l);
     for (int i = 0; i < l; ++i)
     {
-        ll x; cin >> x;
+        int x; cin >> x;
         zombies.emplace_back(x);
     }
-    vector<ll> diff(l + 1, 0);
-    ll cur = 1;
-
+    ll active_bombs = 0;
+    vector<bool> used_bomb(l, false);
     for (ll i = 0; i < l; ++i)
     {
-        cur += diff[i];
+        if (i >= range && used_bomb[i - range])
+        {
+            --active_bombs;
+        }
         const auto hp = zombies[i];
-        const auto dmg = cur * power;
+        if (hp == 0)continue;
+        const auto dist = i + 1LL;
+        const auto dmg = (min(dist, range) - active_bombs) * power;
         if (dmg < hp)
         {
-            if (bomb)
-            {
-                --bomb;
-            }
-            else
+            if (0 > --bomb)
             {
                 cout << "NO";
                 return;
-            }
-        }
-        else
-        {
-            ++cur;
-            if (i + range < l)
-            {
-                --diff[i + range];
-            }
+            } 
+            used_bomb[i] = true;
+            active_bombs++;
         }
     }
     cout << "YES";

@@ -10,54 +10,43 @@ using pll = pair<ll, ll>;
 using pull = pair<ull, ull>;
 void Solve() noexcept
 {
-    ll l, range, power, bomb;
-    cin >> l >> range >> power >> bomb;
-
-    vector<ll> zombies;
-    zombies.reserve(l);
+    ll l, range, power, bomb; cin >> l >> range >> power >> bomb;
+    vector<ll> zombies; zombies.reserve(l);
     for (int i = 0; i < l; ++i)
     {
         ll x; cin >> x;
         zombies.emplace_back(x);
     }
-
-    
-    ll active_bombs = 0;
-
-   
-    vector<bool> used_bomb(l, false);
+    vector<ll> diff(l + 1, 0);
+    ll cur = 1;
 
     for (ll i = 0; i < l; ++i)
     {
-        
-        if (i >= range && used_bomb[i - range]) {
-            active_bombs--;
-        }
-
-        const auto dist = i + 1LL;
+        cur += diff[i];
         const auto hp = zombies[i];
-
-        if (hp == 0) continue;
-
-       
-        const auto dmg = (min(dist, range) - active_bombs) * power;
-
+        const auto dmg = cur * power;
         if (dmg < hp)
         {
-            if (bomb > 0)
+            if (bomb)
             {
-                used_bomb[i] = true;
-                active_bombs++;    
-                --bomb;          
+                --bomb;
             }
             else
             {
-                cout << "NO\n";
+                cout << "NO";
                 return;
             }
         }
+        else
+        {
+            ++cur;
+            if (i + range < l)
+            {
+                --diff[i + range];
+            }
+        }
     }
-    cout << "YES\n";
+    cout << "YES";
 }
 int main()
 {

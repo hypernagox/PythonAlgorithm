@@ -12,19 +12,18 @@ void Solve() noexcept
 {
     string s1, s2; cin >> s1 >> s2;
     int ans = 0;
-    for (int i = 0; i < s2.size();)
+    int i = 0;
+    while (i < s2.size())
     {
         int maxLen = 0;
         for (int j = 0; j < s1.size(); ++j)
         {
-            int tmp = 0;
-            while (j + tmp < s1.length() &&
-                i + tmp < s2.length() &&
-                s1[j + tmp] == s2[i + tmp])
+            int k = 0;
+            while (i + k < s2.size() && j + k < s1.size() && s2[i + k] == s1[j + k])
             {
-                ++tmp;
+                ++k;
             }
-            maxLen = max(maxLen, tmp);
+            maxLen = max(maxLen, k);
         }
         i += maxLen;
         ++ans;

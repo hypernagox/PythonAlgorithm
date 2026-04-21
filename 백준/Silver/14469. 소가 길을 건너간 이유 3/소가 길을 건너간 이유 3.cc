@@ -1,33 +1,29 @@
 #include <bits/stdc++.h>
 using namespace std;
 void FastIO()noexcept { ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL); }
-constexpr const int INF = static_cast<int>(1e9);
+constexpr const int INF = static_cast<int>(1e9) + 1;
 constexpr const int MIN_INF = -INF;
 using ll = long long;
 using ull = unsigned long long;
 using pi = pair<int, int>;
 using pll = pair<ll, ll>;
 using pull = pair<ull, ull>;
-pi arr[101];
-void Solve()noexcept
+void Solve() noexcept
 {
     int n; cin >> n;
+    vector<pi> v;
     for (int i = 0; i < n; ++i)
     {
-        cin >> arr[i].first >> arr[i].second;
+        int a, b; cin >> a >> b;
+        v.emplace_back(a, b);
     }
-    sort(arr, arr + n);
-    int cur_time = 0;
-    for (int i = 0; i < n; ++i)
+    sort(v.begin(), v.end());
+    int cur_last = 0;
+    for (const auto [start, wait] : v)
     {
-        const auto [arrive, during] = arr[i];
-        if (cur_time < arrive)
-        {
-            cur_time = arrive;
-        }
-        cur_time += during;
+        cur_last = max(cur_last, start) + wait;
     }
-    cout << cur_time;
+    cout << cur_last;
 }
 int main()
 {

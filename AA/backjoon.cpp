@@ -15,6 +15,7 @@ constexpr const int dx[]{ 0,1,0,-1 };
 int visited[11][11][11][11];
 struct Data
 {
+
     pi r_pos;
     pi b_pos;
 };
